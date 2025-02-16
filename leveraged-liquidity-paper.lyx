@@ -1,0 +1,1083 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass revtex4-2
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics pdftex
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Eliminating impermanent loss by leveraged liquidity"
+\pdf_author "Michael Egorov"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Eliminating impermanent loss by leveraged liquidity
+\end_layout
+
+\begin_layout Author
+Michael Egorov
+\end_layout
+
+\begin_layout Date
+20 October 2024
+\end_layout
+
+\begin_layout Author Email
+michael@curve.fi
+\end_layout
+
+\begin_layout Abstract
+Ever since the Automatic Market Makers (AMMs) were introduced in Decentralized Finance (DeFi),
+ there was an issue of so-called 
+\begin_inset Quotes eld
+\end_inset
+
+impermanent loss
+\begin_inset Quotes erd
+\end_inset
+
+ (IL,
+ or sometimes called LVR - loss vs rebalance),
+ that is that AMMs often perform as a worse store of value than simply holding the components of liquidity idle.
+ In this work,
+ I propose a method to eliminate IL and make the position priced similarly to an individual component of liquidity while earning exchange fees.
+ The simulations show,
+ for example,
+ that BTC/USD liquidity can make up to 
+\begin_inset Formula $16\%$
+\end_inset
+
+ fundamentally while being priced similarly to BTC.
+\end_layout
+
+\begin_layout Section*
+General idea
+\end_layout
+
+\begin_layout Standard
+In Curve Cryptoswap AMM,
+ price of liquidity (excluding earned trading fees) is approximately calculated similarly to that in classic 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ invariant 
+\begin_inset Formula $p_{LP}=\sqrt{p}$
+\end_inset
+
+,
+ where 
+\begin_inset Formula $p$
+\end_inset
+
+ is price of the token 
+\begin_inset Formula $y$
+\end_inset
+
+ (for example,
+ BTC) in terms of token 
+\begin_inset Formula $x$
+\end_inset
+
+ (for example,
+ USD).
+ This is where impermanent loss comes from:
+ for example 
+\begin_inset Formula $\sqrt{p}<1/2+p/2$
+\end_inset
+
+ for all 
+\begin_inset Formula $p\neq1$
+\end_inset
+
+ means that holding an asset with initial price of 
+\begin_inset Formula $1$
+\end_inset
+
+ and equal amount of USD would outperform always-rebalanced liquidity if trading fee is set to zero.
+\end_layout
+
+\begin_layout Standard
+Now,
+ let's consider leverage 
+\begin_inset Formula $L$
+\end_inset
+
+.
+ If one borrows against any token with a price 
+\begin_inset Formula $p^{\prime}$
+\end_inset
+
+ to buy even more of that token so that the value of the loan 
+\begin_inset Formula $d$
+\end_inset
+
+is always kept to be equal to 
+\begin_inset Formula $d=V\left(1-1/L\right)$
+\end_inset
+
+,
+ where 
+\begin_inset Formula $V$
+\end_inset
+
+ is value of collateral,
+ the position will be leveraged with the leverage 
+\begin_inset Formula $L$
+\end_inset
+
+ at all times,
+ and price of the whole position will be proportional to 
+\begin_inset Formula $p_{*}=\left(p^{\prime}\right)^{L}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/sqrt.pdf
+	width 9cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:scheme-of-leverage"
+
+\end_inset
+
+Schematic of leveraging liquidity to have no impermanent loss
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore,
+ if 
+\begin_inset Formula $L=2$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{LP}=\sqrt{p}$
+\end_inset
+
+,
+ leveraging liquidity would give 
+\begin_inset Formula $p_{*}=\left(\sqrt{p}\right)^{2}=p$
+\end_inset
+
+,
+ simply price of the token 
+\begin_inset Formula $y$
+\end_inset
+
+,
+ while the position makes exchange fees in addition (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:scheme-of-leverage"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ While it sounds simple,
+ it will not work with 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ invariant for the liquidity:
+ losses on rebalancing to keep the leverage constant will simply be not lower than the earnings of the pool.
+ Situation with Curve Cryptoswap,
+ however,
+ is much better,
+ as will be shown in simulations.
+\end_layout
+
+\begin_layout Standard
+Another curious property is that for 
+\begin_inset Formula $L=2$
+\end_inset
+
+,
+ size of the loan is equal to half of the size of liquidity leveraged.
+ But USD part of that liquidity is also equal to half of its size in value.
+ Therefore,
+ if leverage is kept constant and equal to 2,
+ liquidity will always have enough USD to close the position,
+ which is a very convenient property.
+\end_layout
+
+\begin_layout Standard
+APR of the resulting position can be expressed as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).
+\]
+
+\end_inset
+
+So this method only works when the rate pool (multiplied by leverage) is significantly higher than the total of borrow rate and losses introduced by rebalances of the position to keep the value of leverage.
+\end_layout
+
+\begin_layout Section*
+Using CDP interest rate for rebalancing
+\end_layout
+
+\begin_layout Standard
+In Curve,
+ all liquidity pools have concentrated liquidity.
+ However,
+ when price of the asset is not constant,
+ concentrated liquidity is moved towards current prices automatically (Fig.).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/shift-distribution.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Movement of concentrated liquidity towards current prices
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Subsidy for moving concentrated liquidity
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Automatic management of concentrated liquidity
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Pool optimization
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/noboost-apr.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Optimization of unboosted cryptoswap pool:
+ 
+\begin_inset Formula $\left(f_{out},\gamma_{fee}\right)$
+\end_inset
+
+optimization
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/boosted-apr.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Optimization of boosted cryptoswap pool:
+ 
+\begin_inset Formula $\left(f_{out},\gamma_{fee}\right)$
+\end_inset
+
+optimization
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Final optimization step for standard 
+\begin_inset Quotes eld
+\end_inset
+
+unboosted
+\begin_inset Quotes erd
+\end_inset
+
+ and boosted cryptoswap pools
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Releverage algorithm
+\end_layout
+
+\begin_layout Standard
+Keeping leverage constant manually is not efficient,
+ although can be done.
+ Problem with manual approach is that the threshold price change at which it should happen is relatively high (10%) which makes variations in the returns very high (e.g.
+ returns can go negative very often).
+\end_layout
+
+\begin_layout Standard
+Instead,
+ a special AMM is used for releveraging.
+ The AMM uses an external oracle with price 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+ for the asset which is being re-leveraged.
+ The AMM keeps reserves of collateral 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ Instead of keeping reserves of stablecoins,
+ it borrows those having a debt 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ When market price 
+\begin_inset Formula $p$
+\end_inset
+
+ is equal to 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+,
+ in order to keep the leverage 
+\begin_inset Formula $L$
+\end_inset
+
+,
+ ideal debt should be equal to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\widetilde{d}=\frac{L-1}{L}p_{o}\widetilde{y},
+\]
+
+\end_inset
+
+where values with ~ mean that they are taken at the time when market price is equal to the oracle price.
+ For example,
+ one can see that for 
+\begin_inset Formula $L=2$
+\end_inset
+
+ (our case) 
+\begin_inset Formula $\widetilde{d}=p_{o}y/2$
+\end_inset
+
+,
+ which matches the intuition of keeping constant leverage.
+\end_layout
+
+\begin_layout Standard
+We keep leverage constant via a variant of 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ AMM with 
+\begin_inset Formula $x$
+\end_inset
+
+ being represented as a function of oracle price and debt:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(x_{0}(p_{o})-d\right)y=I\left(p_{o}\right),
+\]
+
+\end_inset
+
+where invariant 
+\begin_inset Formula $I$
+\end_inset
+
+ is constant at the same 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+,
+ 
+\begin_inset Formula $x\equiv x_{0}\left(p_{o}\right)-d$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In order to find 
+\begin_inset Formula $x_{o}\left(p_{o}\right)$
+\end_inset
+
+ function,
+ let's use the ideal values for 
+\begin_inset Formula $p=p_{o}$
+\end_inset
+
+and property of 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ invariant:
+ 
+\begin_inset Formula $p=x/y$
+\end_inset
+
+.
+ When we apply this to 
+\begin_inset Formula $p=p_{o}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{0}\left(p_{o}\right)-\widetilde{d}=\widetilde{y}p_{o},
+\]
+
+\end_inset
+
+and therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{0}\left(p_{o}\right)=\frac{2L-1}{L}p_{o}\widetilde{y}.
+\]
+
+\end_inset
+
+As an example (which we will use later to choose the right solution),
+ at 
+\begin_inset Formula $\widetilde{y}=2$
+\end_inset
+
+,
+ 
+\begin_inset Formula $p_{o}=1$
+\end_inset
+
+,
+ 
+\begin_inset Formula $L=2$
+\end_inset
+
+,
+ 
+\begin_inset Formula $\widetilde{d}=1$
+\end_inset
+
+,
+ we find 
+\begin_inset Formula $x_{0}=3$
+\end_inset
+
+,
+ and indeed,
+ that satisfies 
+\begin_inset Formula $x_{0}-\widetilde{d}=p_{o}\widetilde{y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now,
+ let's find the function 
+\begin_inset Formula $x_{0}\left(p_{o}\right)$
+\end_inset
+
+ for any current values of 
+\begin_inset Formula $y$
+\end_inset
+
+ and 
+\begin_inset Formula $d$
+\end_inset
+
+ (since 
+\begin_inset Formula $y,$
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+ should fully define the state of the AMM).
+ First,
+ if we did know 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ - we would be able to express 
+\begin_inset Quotes eld
+\end_inset
+
+ideal
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $\widetilde{y}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\widetilde{y}=\frac{L}{2L-1}\frac{x_{0}}{p_{o}}.
+\]
+
+\end_inset
+
+We also know that at constant 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+ the value of invariant 
+\begin_inset Formula $I$
+\end_inset
+
+ is constant and the same as at 
+\begin_inset Quotes eld
+\end_inset
+
+ideal
+\begin_inset Quotes erd
+\end_inset
+
+ parameters (e.g.
+ 
+\begin_inset Formula $\widetilde{y}$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y\left(x_{0}-d\right)=\widetilde{y}\left(x_{0}-\frac{L-1}{L}p_{o}\widetilde{y}\right).
+\]
+
+\end_inset
+
+Here we take 
+\begin_inset Formula $x_{0}\equiv x_{0}\left(p_{o}\right)$
+\end_inset
+
+ for simplicity.
+\end_layout
+
+\begin_layout Standard
+Now,
+ when we substitute 
+\begin_inset Formula $\widetilde{y}$
+\end_inset
+
+ expressed from 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+,
+ we obtain a quadratic equation for 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{0}^{2}\left(\frac{L}{2L-1}\right)^{2}-p_{o}yx_{0}+p_{o}yd=0
+\]
+
+\end_inset
+
+Given the 
+\begin_inset Quotes eld
+\end_inset
+
+simple
+\begin_inset Quotes erd
+\end_inset
+
+ obvious solution mentioned previously,
+ we choose the larger root of the quadratic equation as the solution for 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{0}\left(p_{o}\right)=\frac{p_{o}y+\sqrt{p_{o}^{2}y^{2}-4p_{o}yd\left(\frac{L}{2L-1}\right)^{2}}}{2\left(\frac{L}{2L-1}\right)^{2}}.
+\]
+
+\end_inset
+
+This expression defines everything necessary for the state of the AMM.
+ Before any exchange,
+ one should calculate 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ for the current state,
+ and it stays the same while we are on the same bonding curve and 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+ is unchanged.
+\end_layout
+
+\begin_layout Standard
+Now let's calculate value in the AMM.
+ In order to reduce noise,
+ it makes sense to base it on 
+\begin_inset Formula $p=p_{o}$
+\end_inset
+
+ setting (in this case,
+ value obtained on chain would not be susceptible to sandwich attacks,
+ for example):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V=\widetilde{y}p_{o}-d=\frac{1}{L}\widetilde{y}p_{o}=\frac{x_{0}}{2L-1},
+\]
+
+\end_inset
+
+value of invariant in such conditions is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+I=\left(x_{0}-\widetilde{d}\right)\widetilde{y}=\frac{x_{0}^{2}}{p_{o}}\left(\frac{L}{2L-1}\right)^{2},
+\]
+
+\end_inset
+
+so another way to express value in the pool 
+\begin_inset Formula $V$
+\end_inset
+
+ is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V=2\sqrt{Ip_{o}}-x_{0}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can use 
+\begin_inset Formula $V$
+\end_inset
+
+ when calculating shares when doing deposits and withdrawals.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/lvr-naive.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Losses at 
+\begin_inset Quotes eld
+\end_inset
+
+manual
+\begin_inset Quotes erd
+\end_inset
+
+ releveraging vs price shift when it is triggered
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/lvr-amm.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Automatic releveraging via AMM:
+ dependence on the AMM fee
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Losses introduced by releveraging
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+\begin_inset Quotes eld
+\end_inset
+
+Staked Bitcoin
+\begin_inset Quotes erd
+\end_inset
+
+ and token economics
+\end_layout
+
+\end_body
+\end_document
