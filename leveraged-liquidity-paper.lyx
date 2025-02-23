@@ -956,15 +956,28 @@ V=2\sqrt{Ip_{o}}-x_{0}.
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 We can use 
 \begin_inset Formula $V$
 \end_inset
 
  when calculating shares when doing deposits and withdrawals.
+\end_layout
+
+\begin_layout Standard
+From the above,
+ we can clearly see that 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is proportional to 
+\begin_inset Formula $\sqrt{I}$
+\end_inset
+
+ at a given 
+\begin_inset Formula $p_{o}$
+\end_inset
+
+ which appears useful when we work around deposits and withdrawals further.
 \end_layout
 
 \begin_layout Standard
@@ -1069,14 +1082,11 @@ Losses introduced by releveraging
 \end_layout
 
 \begin_layout Section*
-\begin_inset Quotes eld
-\end_inset
+Deposits and withdrawals
+\end_layout
 
-Staked Bitcoin
-\begin_inset Quotes erd
-\end_inset
-
- and token economics
+\begin_layout Section*
+Splitting revenues with staked and unstaked liquidity
 \end_layout
 
 \end_body
