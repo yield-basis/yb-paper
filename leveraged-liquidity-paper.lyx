@@ -334,9 +334,9 @@ APR of the resulting position can be expressed as:
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).
-\]
+\end{equation}
 
 \end_inset
 
@@ -446,7 +446,7 @@ Automatic management of concentrated liquidity
 \end_layout
 
 \begin_layout Section*
-Pool optimization
+Simulations and pool optimization
 \end_layout
 
 \begin_layout Standard
@@ -616,9 +616,9 @@ Instead,
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 \widetilde{d}=\frac{L-1}{L}p_{o}\widetilde{y},
-\]
+\end{equation}
 
 \end_inset
 
@@ -650,9 +650,9 @@ We keep leverage constant via a variant of
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 \left(x_{0}(p_{o})-d\right)y=I\left(p_{o}\right),
-\]
+\end{equation}
 
 \end_inset
 
@@ -701,9 +701,9 @@ and property of
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 x_{0}\left(p_{o}\right)-\widetilde{d}=\widetilde{y}p_{o},
-\]
+\end{equation}
 
 \end_inset
 
@@ -712,9 +712,9 @@ and therefore
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 x_{0}\left(p_{o}\right)=\frac{2L-1}{L}p_{o}\widetilde{y}.
-\]
+\end{equation}
 
 \end_inset
 
@@ -801,9 +801,9 @@ ideal
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 \widetilde{y}=\frac{L}{2L-1}\frac{x_{0}}{p_{o}}.
-\]
+\end{equation}
 
 \end_inset
 
@@ -833,9 +833,9 @@ ideal
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 y\left(x_{0}-d\right)=\widetilde{y}\left(x_{0}-\frac{L-1}{L}p_{o}\widetilde{y}\right).
-\]
+\end{equation}
 
 \end_inset
 
@@ -866,9 +866,9 @@ Now,
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 x_{0}^{2}\left(\frac{L}{2L-1}\right)^{2}-p_{o}yx_{0}+p_{o}yd=0
-\]
+\end{equation}
 
 \end_inset
 
@@ -890,9 +890,9 @@ simple
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
-x_{0}\left(p_{o}\right)=\frac{p_{o}y+\sqrt{p_{o}^{2}y^{2}-4p_{o}yd\left(\frac{L}{2L-1}\right)^{2}}}{2\left(\frac{L}{2L-1}\right)^{2}}.
-\]
+\begin{equation}
+x_{0}\left(p_{o}\right)=\frac{p_{o}y+\sqrt{p_{o}^{2}y^{2}-4p_{o}yd\left(\frac{L}{2L-1}\right)^{2}}}{2\left(\frac{L}{2L-1}\right)^{2}}.\label{eq:x0}
+\end{equation}
 
 \end_inset
 
@@ -924,9 +924,9 @@ Now let's calculate value in the AMM.
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 V=\widetilde{y}p_{o}-d=\frac{1}{L}\widetilde{y}p_{o}=\frac{x_{0}}{2L-1},
-\]
+\end{equation}
 
 \end_inset
 
@@ -935,9 +935,9 @@ value of invariant in such conditions is:
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 I=\left(x_{0}-\widetilde{d}\right)\widetilde{y}=\frac{x_{0}^{2}}{p_{o}}\left(\frac{L}{2L-1}\right)^{2},
-\]
+\end{equation}
 
 \end_inset
 
@@ -950,9 +950,9 @@ so another way to express value in the pool
 
 \begin_layout Standard
 \begin_inset Formula 
-\[
+\begin{equation}
 V=2\sqrt{Ip_{o}}-x_{0}.
-\]
+\end{equation}
 
 \end_inset
 
