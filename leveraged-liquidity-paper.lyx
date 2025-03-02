@@ -108,11 +108,7 @@ Michael Egorov
 \end_layout
 
 \begin_layout Date
-20 October 2024
-\end_layout
-
-\begin_layout Author Email
-michael@curve.fi
+2 March 2025
 \end_layout
 
 \begin_layout Abstract
@@ -132,11 +128,13 @@ impermanent loss
  I propose a method to eliminate IL and make the position priced similarly to an individual component of liquidity while earning exchange fees.
  The simulations show,
  for example,
- that BTC/USD liquidity can make up to 
-\begin_inset Formula $16\%$
+ that BTC/USD liquidity can make around 
+\begin_inset Formula $20\%$
 \end_inset
 
- fundamentally while being priced similarly to BTC.
+ APR (average over 6 years) fundamentally while being priced similarly to BTC.
+ Of course,
+ the same method is applicable to other cryptocurrencies.
 \end_layout
 
 \begin_layout Section*
@@ -200,13 +198,17 @@ Now,
 \begin_inset Formula $d$
 \end_inset
 
-is always kept to be equal to 
-\begin_inset Formula $d=V\left(1-1/L\right)$
+is 
+\shape italic
+always
+\shape default
+ kept to be equal to 
+\begin_inset Formula $d=V_{c}\left(1-1/L\right)$
 \end_inset
 
 ,
  where 
-\begin_inset Formula $V$
+\begin_inset Formula $V_{c}$
 \end_inset
 
  is value of collateral,
@@ -215,11 +217,65 @@ is always kept to be equal to
 \end_inset
 
  at all times,
- and price of the whole position will be proportional to 
-\begin_inset Formula $p_{*}=\left(p^{\prime}\right)^{L}$
+ and price of the whole position 
+\begin_inset Formula $p_{*}$
+\end_inset
+
+ will be proportional to 
+\begin_inset Formula $\left(p^{\prime}\right)^{L}$
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+Let's prove this formula.
+ Small change in the price 
+\begin_inset Formula $p_{*}$
+\end_inset
+
+ of a token with price 
+\begin_inset Formula $p^{\prime}$
+\end_inset
+
+ leveraged with the leverage 
+\begin_inset Formula $L$
+\end_inset
+
+ satisfied the relationship:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{dp_{*}}{p_{*}}=L\frac{dp^{\prime}}{p^{\prime}}.
+\end{equation}
+
+\end_inset
+
+Integrating that gives:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\log p_{*}=L\log p^{\prime}+\textbf{const}.
+\end{equation}
+
+\end_inset
+
+Exponentiation of both sides gives:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+p_{*}\propto\left(p^{\prime}\right)^{L}.
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -279,7 +335,7 @@ Therefore,
 
 ,
  leveraging liquidity would give 
-\begin_inset Formula $p_{*}=\left(\sqrt{p}\right)^{2}=p$
+\begin_inset Formula $p_{*}\propto\left(\sqrt{p}\right)^{2}=p$
 \end_inset
 
 ,
@@ -307,7 +363,11 @@ nolink "false"
 \end_inset
 
  invariant for the liquidity:
- losses on rebalancing to keep the leverage constant will simply be not lower than the earnings of the pool.
+ losses on rebalancing to keep the leverage constant (or 
+\shape italic
+releverage losses
+\shape default
+) will simply be not lower than the earnings of the pool.
  Situation with Curve Cryptoswap,
  however,
  is much better,
@@ -320,11 +380,12 @@ Another curious property is that for
 \end_inset
 
 ,
- size of the loan is equal to half of the size of liquidity leveraged.
+ size of the loan is equal to half of the size of liquidity leveraged,
+ on average.
  But USD part of that liquidity is also equal to half of its size in value.
  Therefore,
  if leverage is kept constant and equal to 2,
- liquidity will always have enough USD to close the position,
+ liquidity will on aberage have enough USD to close the position,
  which is a very convenient property.
 \end_layout
 
@@ -340,7 +401,9 @@ APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).
 
 \end_inset
 
-So this method only works when the rate pool (multiplied by leverage) is significantly higher than the total of borrow rate and losses introduced by rebalances of the position to keep the value of leverage.
+So this method only works when the rate pool (multiplied by leverage) is significantly higher than the total of borrow rate and losses introduced by releverage of the position.
+ Important to point out that this expression is only approximate,
+ and a more precise APR is given by a combined simulation of cryptopool and releverage.
 \end_layout
 
 \begin_layout Section*
@@ -352,7 +415,19 @@ In Curve,
  all liquidity pools have concentrated liquidity.
  However,
  when price of the asset is not constant,
- concentrated liquidity is moved towards current prices automatically (Fig.).
+ concentrated liquidity is moved towards current prices automatically (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:move-concentrated"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Standard
@@ -369,7 +444,7 @@ placement document
 alignment document
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -385,6 +460,12 @@ status collapsed
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:move-concentrated"
+
+\end_inset
+
 Movement of concentrated liquidity towards current prices
 \end_layout
 
@@ -406,6 +487,16 @@ alignment document
 wide false
 sideways false
 status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/feed-fees.pdf
+	width 9cm
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
@@ -575,7 +666,125 @@ Releverage algorithm
 Keeping leverage constant manually is not efficient,
  although can be done.
  Problem with manual approach is that the threshold price change at which it should happen is relatively high (10%) which makes variations in the returns very high (e.g.
- returns can go negative very often).
+ returns can go negative very often) (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/lvr-naive.pdf
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Losses from manual releverage depending on a price change threshold for triggering it
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/lvr-amm.pdf
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Losses from releverage via an AMM depending on the fee of the AMM
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage"
+
+\end_inset
+
+Comparison of manual releverage and releverage via a special AMM
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -617,7 +826,7 @@ Instead,
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\widetilde{d}=\frac{L-1}{L}p_{o}\widetilde{y},
+\widetilde{d}=\frac{L-1}{L}p_{o}\widetilde{y},\label{eq:ideal-debt}
 \end{equation}
 
 \end_inset
@@ -702,18 +911,31 @@ and property of
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-x_{0}\left(p_{o}\right)-\widetilde{d}=\widetilde{y}p_{o},
+\frac{x_{0}\left(p_{o}\right)-\widetilde{d}}{\widetilde{y}}=p_{o},
 \end{equation}
 
 \end_inset
 
-and therefore
+and therefore,
+ substituting Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ideal-debt"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-x_{0}\left(p_{o}\right)=\frac{2L-1}{L}p_{o}\widetilde{y}.
+x_{0}\left(p_{o}\right)=\frac{2L-1}{L}p_{o}\widetilde{y}.\label{eq:simple-solution}
 \end{equation}
 
 \end_inset
@@ -758,7 +980,11 @@ Now,
 \begin_inset Formula $x_{0}\left(p_{o}\right)$
 \end_inset
 
- for any current values of 
+ for 
+\shape italic
+any
+\shape default
+ current values of 
 \begin_inset Formula $y$
 \end_inset
 
@@ -802,7 +1028,7 @@ ideal
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\widetilde{y}=\frac{L}{2L-1}\frac{x_{0}}{p_{o}}.
+\widetilde{y}=\frac{L}{2L-1}\frac{x_{0}}{p_{o}}.\label{eq:ideal-y}
 \end{equation}
 
 \end_inset
@@ -815,7 +1041,7 @@ We also know that at constant
 \begin_inset Formula $I$
 \end_inset
 
- is constant and the same as at 
+ is conserved and the same as at 
 \begin_inset Quotes eld
 \end_inset
 
@@ -828,13 +1054,18 @@ ideal
 \begin_inset Formula $\widetilde{y}$
 \end_inset
 
+,
+ 
+\begin_inset Formula $\widetilde{d}$
+\end_inset
+
 ):
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-y\left(x_{0}-d\right)=\widetilde{y}\left(x_{0}-\frac{L-1}{L}p_{o}\widetilde{y}\right).
+y\left(x_{0}-d\right)=\widetilde{y}\left(x_{0}-\frac{L-1}{L}p_{o}\widetilde{y}\right).\label{eq:invariant-conservation}
 \end{equation}
 
 \end_inset
@@ -854,6 +1085,30 @@ Now,
 
  expressed from 
 \begin_inset Formula $x_{0}$
+\end_inset
+
+ in Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ideal-y"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ into Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:invariant-conservation"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
 \end_inset
 
 ,
@@ -880,7 +1135,19 @@ simple
 \begin_inset Quotes erd
 \end_inset
 
- obvious solution mentioned previously,
+ obvious solution mentioned previously in Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:simple-solution"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
  we choose the larger root of the quadratic equation as the solution for 
 \begin_inset Formula $x_{0}$
 \end_inset
@@ -925,7 +1192,7 @@ Now let's calculate value in the AMM.
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-V=\widetilde{y}p_{o}-d=\frac{1}{L}\widetilde{y}p_{o}=\frac{x_{0}}{2L-1},
+V=\widetilde{y}p_{o}-d=\frac{1}{L}\widetilde{y}p_{o}=\frac{x_{0}}{2L-1},\label{eq:value}
 \end{equation}
 
 \end_inset
@@ -936,7 +1203,7 @@ value of invariant in such conditions is:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-I=\left(x_{0}-\widetilde{d}\right)\widetilde{y}=\frac{x_{0}^{2}}{p_{o}}\left(\frac{L}{2L-1}\right)^{2},
+I=\left(x_{0}-\widetilde{d}\right)\widetilde{y}=\frac{x_{0}^{2}}{p_{o}}\left(\frac{L}{2L-1}\right)^{2},\label{eq:inv-x0}
 \end{equation}
 
 \end_inset
@@ -964,7 +1231,19 @@ We can use
 \end_layout
 
 \begin_layout Standard
-From the above,
+From Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:inv-x0"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
  we can clearly see that 
 \begin_inset Formula $x_{0}$
 \end_inset
