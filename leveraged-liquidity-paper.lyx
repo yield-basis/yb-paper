@@ -1259,109 +1259,17 @@ nolink "false"
  which appears useful when we work around deposits and withdrawals further.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float figure
-placement document
-alignment document
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Float figure
-placement document
-alignment document
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename img/lvr-naive.pdf
-	width 7cm
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Losses at 
-\begin_inset Quotes eld
-\end_inset
-
-manual
-\begin_inset Quotes erd
-\end_inset
-
- releveraging vs price shift when it is triggered
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\begin_inset Float figure
-placement document
-alignment document
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename img/lvr-amm.pdf
-	width 7cm
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Automatic releveraging via AMM:
- dependence on the AMM fee
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Losses introduced by releveraging
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section*
 Deposits and withdrawals
+\end_layout
+
+\begin_layout Standard
+We are removing impermanent loss in curve Cryptoswap pool,
+ and keeping 
+\begin_inset Formula $L=2$
+\end_inset
+
+ leverage of its liquidity (LP tokens) for that.
 \end_layout
 
 \begin_layout Section*
