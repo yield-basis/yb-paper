@@ -860,7 +860,7 @@ We keep leverage constant via a variant of
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\left(x_{0}(p_{o})-d\right)y=I\left(p_{o}\right),
+\left(x_{0}(p_{o})-d\right)y=I\left(p_{o}\right),\label{eq:inv}
 \end{equation}
 
 \end_inset
@@ -1270,6 +1270,295 @@ We are removing impermanent loss in curve Cryptoswap pool,
 \end_inset
 
  leverage of its liquidity (LP tokens) for that.
+\end_layout
+
+\begin_layout Standard
+When deposit is happening,
+ we deposit first in Cryptoswap pool,
+ and take a loan with 
+\begin_inset Formula $d$
+\end_inset
+
+ stablecoins against LP token created by this deposit.
+ User brings just cryptocurrency (like BTC) with the amount 
+\begin_inset Formula $c_{in}$
+\end_inset
+
+.
+ So deposit works in the following sequence:
+\end_layout
+
+\begin_layout Itemize
+User brings 
+\begin_inset Formula $c_{in}$
+\end_inset
+
+ of cryptocurrency and specifies the debt 
+\begin_inset Formula $\Delta d$
+\end_inset
+
+ (which has value equal to the value of cryptocurrency ideally,
+ or can be calculated proportionally to balances in Cryptoswap);
+\end_layout
+
+\begin_layout Itemize
+System takes a loan of 
+\begin_inset Formula $\Delta d$
+\end_inset
+
+ stablecoins and deposits 
+\begin_inset Formula $(\Delta d,c_{in})$
+\end_inset
+
+ in Cryptoswap,
+ yielding 
+\begin_inset Formula $l$
+\end_inset
+
+ LP tokens;
+\end_layout
+
+\begin_layout Itemize
+Calculate value in Yield Basis AMM using Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:value"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ calculated using Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:x0"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ for the state before deposit 
+\begin_inset Formula $\left(d,y\right)$
+\end_inset
+
+ and after the deposit 
+\begin_inset Formula $\left(d+\Delta d,y+l\right)$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+Calculate amount of YB tokens to mint for the depositor proportionally to the value increase from our deposit.
+\end_layout
+
+\begin_layout Standard
+Withdrawal is more complex.
+ For withdrawal,
+ user brings YB LP tokens to redeem 
+\begin_inset Formula $t$
+\end_inset
+
+,
+ they are withdrawn from the Yield Basis AMM,
+ and cryptocurrency goes back to the user while stablecoin is used to repay the debt corresponding to this position.
+ The difficulty is though that debt amount to repay 
+\begin_inset Formula $\Delta d$
+\end_inset
+
+ should be such that the value change is exactly proportional to the value decrease on supply of YB LP tokens.
+ The ideal amount of debt 
+\begin_inset Formula $\Delta d$
+\end_inset
+
+ to repay therefore should be calculated inside the smart contract.
+ If supply of YB LP tokens is 
+\begin_inset Formula $s$
+\end_inset
+
+,
+ we define:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\varepsilon=\frac{s-t}{t}.
+\end{equation}
+
+\end_inset
+
+We also define ratio of LP tokens in Cryptoswap to stablecoins as 
+\begin_inset Formula $r=L/b_{st}$
+\end_inset
+
+where 
+\begin_inset Formula $L$
+\end_inset
+
+ is supply of LP tokens representing Cryptoswap liquidity and 
+\begin_inset Formula $b_{st}$
+\end_inset
+
+ is amount of stablecoins the Cryptoswap pool holds.
+\end_layout
+
+\begin_layout Standard
+If the releverage AMM invariant before withdrawal is 
+\begin_inset Formula $I_{1}$
+\end_inset
+
+ and after is 
+\begin_inset Formula $I_{2}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\sqrt{I_{2}}=\varepsilon\sqrt{I_{1}}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also note that according to Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:inv-x0"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is proportional to 
+\begin_inset Formula $\sqrt{I}$
+\end_inset
+
+as well,
+ so the value of 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+is reduced by factor of 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ also.
+ Thus,
+ subsituting the invariant from Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:inv"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and denoting debts and crypto balances of the AMM before and after the withdrawal as 
+\begin_inset Formula $\left(d_{1},c_{1}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\left(d_{2},c_{2}\right)$
+\end_inset
+
+,
+ 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ corresponding to balances before the withdrawal:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\sqrt{\left(\varepsilon x_{0}-d_{2}\right)c_{2}} & = & \varepsilon\sqrt{\left(x_{0}-d_{1}\right)c_{1}},\\
+d_{2} & = & d_{1}-\Delta d,\\
+c_{2} & = & c_{1}-r\Delta d
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The equation to solve against 
+\begin_inset Formula $\Delta d$
+\end_inset
+
+ appears to be a quadratic equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\left(\varepsilon x_{0}-d_{1}+\Delta d\right)\left(c_{1}-r\Delta d\right)=\left(x_{0}-d_{1}\right)c_{1}\varepsilon^{2}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The solution is given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+D & = & \left(c_{1}+rd_{1}-r\varepsilon x_{0}\right)^{2}+4rc_{1}\left(1-\varepsilon\right)\left(\varepsilon\left(x_{0}-d_{1}\right)-d_{1}\right),\\
+\Delta d & = & \frac{c_{1}+rd_{1}-r\varepsilon x_{0}+\sqrt{D}}{2r}.\label{eq:withdrawal-debt}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:withdrawal-debt"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ is used when calculating the amount of debt to be repaid when executing withdrawal in the smart contract.
 \end_layout
 
 \begin_layout Section*
