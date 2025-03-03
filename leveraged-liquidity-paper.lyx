@@ -1537,7 +1537,7 @@ The solution is given by:
 \begin_inset Formula 
 \begin{eqnarray}
 D & = & \left(c_{1}+rd_{1}-r\varepsilon x_{0}\right)^{2}+4rc_{1}\left(1-\varepsilon\right)\left(\varepsilon\left(x_{0}-d_{1}\right)-d_{1}\right),\\
-\Delta d & = & \frac{c_{1}+rd_{1}-r\varepsilon x_{0}+\sqrt{D}}{2r}.\label{eq:withdrawal-debt}
+\Delta d & = & \frac{\left(c_{1}+rd_{1}-r\varepsilon x_{0}\right)+\sqrt{D}}{2r}.\label{eq:withdrawal-debt}
 \end{eqnarray}
 
 \end_inset
