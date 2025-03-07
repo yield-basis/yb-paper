@@ -1272,6 +1272,10 @@ We are removing impermanent loss in curve Cryptoswap pool,
  leverage of its liquidity (LP tokens) for that.
 \end_layout
 
+\begin_layout Subsection*
+Deposits
+\end_layout
+
 \begin_layout Standard
 When deposit is happening,
  we deposit first in Cryptoswap pool,
@@ -1360,6 +1364,10 @@ nolink "false"
 
 \begin_layout Itemize
 Calculate amount of YB tokens to mint for the depositor proportionally to the value increase from our deposit.
+\end_layout
+
+\begin_layout Subsection*
+Witdrawals
 \end_layout
 
 \begin_layout Standard
@@ -1563,6 +1571,406 @@ nolink "false"
 
 \begin_layout Section*
 Splitting revenues with staked and unstaked liquidity
+\end_layout
+
+\begin_layout Standard
+In Yield Basis,
+ real yields are only going to those users who did not opt in to earn YB tokens (e.g.
+ stake).
+ If they did not stake - they earn real yield from fees.
+ If they did - they don't earn any yield from fees,
+ but they earn governance tokens from emissions.
+ The system also earns admin fee which is taken from the fees earned and given to YB token stakers (e.g.
+ veYB).
+\end_layout
+
+\begin_layout Standard
+The fee portion going to veYB dynamically depends on how much is staked.
+ Let's denote:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $s$
+\end_inset
+
+ - amount of LP tokens staked to earn YB tokens;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $T$
+\end_inset
+
+ - total amount of LP tokens;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f_{\min}$
+\end_inset
+
+- minimal value of admin fee;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $r$
+\end_inset
+
+ - natural return rate (e.g.
+ how much LPs would have been earning if no token system / staking / unstaking existed).
+\end_layout
+
+\begin_layout Standard
+With those,
+ admin fee will be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+f_{a}=1-\left(1-f_{\min}\right)\sqrt{1-\frac{s}{T}}.
+\end{equation}
+
+\end_inset
+
+This formula has the following properties:
+\end_layout
+
+\begin_layout Itemize
+if nothing is staked (
+\begin_inset Formula $s/T=0$
+\end_inset
+
+),
+ system admin fee is equal to 
+\begin_inset Formula $f_{\min}$
+\end_inset
+
+ (for example,
+ 
+\begin_inset Formula $10\%$
+\end_inset
+
+),
+ and the rest (
+\begin_inset Formula $90\%$
+\end_inset
+
+) goes to LPs;
+\end_layout
+
+\begin_layout Itemize
+if everything is staked (
+\begin_inset Formula $s/T=100\%$
+\end_inset
+
+),
+ system admin fee is equal to 
+\begin_inset Formula $100\%$
+\end_inset
+
+ because LPs are all earning YB tokens and nothing else.
+\end_layout
+
+\begin_layout Standard
+Let's consider returns for the unstaked 
+\begin_inset Formula $r_{us}$
+\end_inset
+
+ part in different limits of how much is staked.
+ If 
+\begin_inset Formula $s\rightarrow0$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+f_{a} & \rightarrow & f_{\min,}\\
+r_{us} & \rightarrow & \text{\left(1-f_{\min}\right)r.}
+\end{eqnarray}
+
+\end_inset
+
+And if 
+\begin_inset Formula $s\rightarrow T$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+f_{a} & \rightarrow & 100\%,\\
+r_{us} & \rightarrow & \infty.
+\end{eqnarray}
+
+\end_inset
+
+The infinite 
+\begin_inset Formula $r_{us}$
+\end_inset
+
+while admin fee is going to 
+\begin_inset Formula $100\%$
+\end_inset
+
+ is deliberate and the reason why the admin fee formula is constructed this way.
+\end_layout
+
+\begin_layout Standard
+From Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:value"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ total value of liquidity expressed in crypto is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+v=\frac{x_{0}}{\left(2L-1\right)p_{o}}.
+\end{equation}
+
+\end_inset
+
+We define:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{-1}$
+\end_inset
+
+ - previous total value of liquidity;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{+1}$
+\end_inset
+
+ - new total value of liquidity before admin fee is taken;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{s}$
+\end_inset
+
+ - value assigned to staked liquidity (which earns no fees);
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{us}$
+\end_inset
+
+ - value assigned to unstaked liquidity (the one which earns fees);
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{s*}$
+\end_inset
+
+ - 
+\begin_inset Quotes eld
+\end_inset
+
+ideal
+\begin_inset Quotes erd
+\end_inset
+
+ value of staked liquidity (the it'd have if we have no losses);
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $a$
+\end_inset
+
+ - running value of collected admin fees.
+\end_layout
+
+\begin_layout Standard
+Let's look at the situation when the value 
+\begin_inset Formula $v$
+\end_inset
+
+ is just changed due to trades (not deposits or withdrawals).
+ Then running value of admin fees increases by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\Delta a=\left(v_{1}-v_{-1}\right)f_{a},
+\end{equation}
+
+\end_inset
+
+and value to be split between 
+\begin_inset Formula $v_{s}$
+\end_inset
+
+ and 
+\begin_inset Formula $v_{us}$
+\end_inset
+
+ is the rest:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\Delta v_{use}=\left(v_{1}-v_{-1}\right)\left(1-f_{a}\right).
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After admin fee is taken,
+ new total value of liquidity is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+v_{1}^{\prime}=v_{-1}+\Delta v_{use}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we did not have any losses,
+ staked liquidity value us equal to its upper limit:
+ 
+\begin_inset Formula $v_{s}=v_{s*}$
+\end_inset
+
+.
+ If we,
+ however,
+ happened to experience a loss,
+ e.g.
+ 
+\begin_inset Formula $\Delta v_{use}<0$
+\end_inset
+
+,
+ we share this loss between staked and unstaked liquidity:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\Delta v_{s}=\Delta v_{use}\frac{s}{T},\qquad\Delta v_{use}\le0.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we had profit but previously have loss,
+ then 
+\begin_inset Formula $v_{s}<v_{s*}$
+\end_inset
+
+,
+ and we need to add value to 
+\begin_inset Formula $v_{s}$
+\end_inset
+
+ until it reaches 
+\begin_inset Formula $v_{s*}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\Delta v_{s}=\min\left(\Delta v_{use}\frac{s}{T},\max\left(v_{s*}-v_{s},0\right)\right),\qquad\Delta v_{use}>0.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The amount of unstaked LP tokens does not change if no deposits/withdrawals are happening,
+ so one LP token represents a value-accruing cryptocurrency.
+ Without deposits or withdrawals then 
+\begin_inset Formula $T-s=\text{const}$
+\end_inset
+
+.
+ The value of 
+\begin_inset Quotes eld
+\end_inset
+
+staked
+\begin_inset Quotes erd
+\end_inset
+
+ tokens,
+ however,
+ experiences negative rebases.
+ Let's call reduction of number of staked LP tokens as 
+\begin_inset Formula $\delta s$
+\end_inset
+
+.
+ Then total and staked tokens after such a rebase accordingly change:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+s^{\prime} & = & s-\delta s,\\
+T^{\prime} & = & T-\delta s.
+\end{eqnarray}
+
+\end_inset
+
+The ratio between these values should be the same as ratio between new staked and total values:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{s-\delta s}{T-\delta s}=\frac{v_{s}^{\prime}}{v_{1}^{\prime}}.
+\end{equation}
+
+\end_inset
+
+From this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\delta s=\frac{sv_{1}^{\prime}-Tv_{s}^{\prime}}{T-s}.
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \end_body
