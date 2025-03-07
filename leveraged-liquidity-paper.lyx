@@ -1965,7 +1965,7 @@ From this:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\delta s=\frac{sv_{1}^{\prime}-Tv_{s}^{\prime}}{T-s}.
+\delta s=\frac{sv_{1}^{\prime}-Tv_{s}^{\prime}}{v_{1}^{\prime}-v_{s}^{\prime}}.
 \end{equation}
 
 \end_inset
