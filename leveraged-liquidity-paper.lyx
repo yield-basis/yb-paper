@@ -1371,202 +1371,79 @@ Witdrawals
 \end_layout
 
 \begin_layout Standard
-Withdrawal is more complex.
- For withdrawal,
- user brings YB LP tokens to redeem 
+When a user withdraws a fraction of liqudity,
+ in order to not have any unfair disadvantage for liquidity providers,
+ one cannot specify an arbitrary value of the debt.
+ Instead,
+ both collateral and debt are reduced by the same fraction equal to fraction of overall LP tokens being withdrawn.
+ So withdrawal sequence inside the smart contract looks as the following:
+\end_layout
+
+\begin_layout Itemize
+User brings 
 \begin_inset Formula $t$
 \end_inset
 
-,
- they are withdrawn from the Yield Basis AMM,
- and cryptocurrency goes back to the user while stablecoin is used to repay the debt corresponding to this position.
- The difficulty is though that debt amount to repay 
-\begin_inset Formula $\Delta d$
-\end_inset
-
- should be such that the value change is exactly proportional to the value decrease on supply of YB LP tokens.
- The ideal amount of debt 
-\begin_inset Formula $\Delta d$
-\end_inset
-
- to repay therefore should be calculated inside the smart contract.
- If supply of YB LP tokens is 
+ LP tokens to withdraw.
+ If supply of LP tokens is 
 \begin_inset Formula $s$
 \end_inset
 
 ,
- we define:
+ liquidity gets reduced by 
+\begin_inset Formula $s/t$
+\end_inset
+
+;
 \end_layout
 
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\varepsilon=\frac{s-t}{t}.
-\end{equation}
-
-\end_inset
-
-We also define ratio of LP tokens in Cryptoswap to stablecoins as 
-\begin_inset Formula $r=L/b_{st}$
-\end_inset
-
-where 
-\begin_inset Formula $L$
-\end_inset
-
- is supply of LP tokens representing Cryptoswap liquidity and 
-\begin_inset Formula $b_{st}$
-\end_inset
-
- is amount of stablecoins the Cryptoswap pool holds.
-\end_layout
-
-\begin_layout Standard
-If the releverage AMM invariant before withdrawal is 
-\begin_inset Formula $I_{1}$
-\end_inset
-
- and after is 
-\begin_inset Formula $I_{2}$
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\sqrt{I_{2}}=\varepsilon\sqrt{I_{1}}.
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We also note that according to Eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:inv-x0"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
+\begin_layout Itemize
+Collateral gets reduced by 
+\begin_inset Formula $\delta c=cs/t$
 \end_inset
 
 ,
- 
-\begin_inset Formula $x_{0}$
+ and debt gets reduced by 
+\begin_inset Formula $\delta d=ds/t$
 \end_inset
 
- is proportional to 
-\begin_inset Formula $\sqrt{I}$
+;
+\end_layout
+
+\begin_layout Itemize
+Since collateral is LP tokens of cryptopool,
+ we withdraw 
+\begin_inset Formula $\delta c$
 \end_inset
 
-as well,
- so the value of 
-\begin_inset Formula $x_{0}$
+ LP tokens but in such a way that the amount of stablecoin withdrawn is exactly 
+\begin_inset Formula $\delta d$
 \end_inset
 
-is reduced by factor of 
-\begin_inset Formula $\varepsilon$
-\end_inset
-
- also.
- Thus,
- subsituting the invariant from Eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:inv"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
- and denoting debts and crypto balances of the AMM before and after the withdrawal as 
-\begin_inset Formula $\left(d_{1},c_{1}\right)$
+,
+ and amount of cryptocurrency is kept varied as a function of 
+\begin_inset Formula $\delta c$
 \end_inset
 
  and 
-\begin_inset Formula $\left(d_{2},c_{2}\right)$
+\begin_inset Formula $\delta d$
 \end_inset
 
 ,
- 
-\begin_inset Formula $x_{0}$
-\end_inset
-
- corresponding to balances before the withdrawal:
+ given by 
+\family typewriter
+withdraw_fixed_out
+\family default
+ method of the smart contract;
 \end_layout
 
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray}
-\sqrt{\left(\varepsilon x_{0}-d_{2}\right)c_{2}} & = & \varepsilon\sqrt{\left(x_{0}-d_{1}\right)c_{1}},\\
-d_{2} & = & d_{1}-\Delta d,\\
-c_{2} & = & c_{1}-r\Delta d
-\end{eqnarray}
-
+\begin_layout Itemize
+Part of debt 
+\begin_inset Formula $\delta d$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-The equation to solve against 
-\begin_inset Formula $\Delta d$
-\end_inset
-
- appears to be a quadratic equation:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\left(\varepsilon x_{0}-d_{1}+\Delta d\right)\left(c_{1}-r\Delta d\right)=\left(x_{0}-d_{1}\right)c_{1}\varepsilon^{2}.
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The solution is given by:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray}
-D & = & \left(c_{1}+rd_{1}-r\varepsilon x_{0}\right)^{2}+4rc_{1}\left(1-\varepsilon\right)\left(\varepsilon\left(x_{0}-d_{1}\right)-d_{1}\right),\\
-\Delta d & = & \frac{\left(c_{1}+rd_{1}-r\varepsilon x_{0}\right)+\sqrt{D}}{2r}.\label{eq:withdrawal-debt}
-\end{eqnarray}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The Eq.
- 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:withdrawal-debt"
-plural "false"
-caps "false"
-noprefix "false"
-nolink "false"
-
-\end_inset
-
- is used when calculating the amount of debt to be repaid when executing withdrawal in the smart contract.
+ gets repaid from the withdrawn stablecoins,
+ and cryptocurrency withdrawn from cryptoswap gets passed to the user.
 \end_layout
 
 \begin_layout Section*
