@@ -549,6 +549,165 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/7-xyk-fee-APY.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Reference study:
+ optimizing 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ pool fee.
+ Data over 2 years (Jan 2023 - Oct 2024) used
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/1-A-fee-APY.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Optimizing concentration parameter 
+\begin_inset Formula $A$
+\end_inset
+
+ and fee 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ simultaneously
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/2-A-APY.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Optimizing concentration parameter 
+\begin_inset Formula $A$
+\end_inset
+
+ at 
+\begin_inset Formula $f_{mid}=0.003$
+\end_inset
+
+ - slice of the 2D scan
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Initial optimization of cryptopool:
+ no dynamic fee applied.
+ Data over 6 years (Jan 2019 - Oct 2024) used
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
 \begin_inset Float figure
 placement document
 alignment document
@@ -595,7 +754,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename img/boosted-apr.pdf
+	filename img/3-out_fee-fee_gamma.pdf
 	width 7cm
 
 \end_inset
@@ -641,7 +800,214 @@ unboosted
 \begin_inset Quotes erd
 \end_inset
 
- and boosted cryptoswap pools
+ and boosted cryptoswap pools.
+ Data over 2 years (Jan 2023 - Oct 2024) used
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/8-optimize-releverage-fee.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Optimizing releverage AMM fee (optimal value:
+ 
+\begin_inset Formula $f=0.007$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/4-growth-6-years.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation from Jan 2019 till Oct 2024:
+ average APR = 
+\begin_inset Formula $20\%$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/5-growth-2-years.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation from Jan 2023 till Oct 2024 (tail of Fig.
+ b):
+ average APR = 
+\begin_inset Formula $9\%$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename img/6-growth-6-fail.pdf
+	width 7cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of too aggressive parameters (
+\begin_inset Formula $A=4.8$
+\end_inset
+
+ instead of 
+\begin_inset Formula $A=4.13$
+\end_inset
+
+).
+ Partial loss is visible (in year 2021),
+ however average APR is approximately the same
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation with releverage AMM removing impermanent loss.
+ Data is obtained for BTC/USD price feed
 \end_layout
 
 \end_inset
