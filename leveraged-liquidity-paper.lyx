@@ -43,7 +43,7 @@
 \pdf_bookmarksopenlevel 1
 \pdf_breaklinks false
 \pdf_pdfborder false
-\pdf_colorlinks false
+\pdf_colorlinks true
 \pdf_backref false
 \pdf_pdfusetitle true
 \papersize default
@@ -396,7 +396,7 @@ APR of the resulting position can be expressed as:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).
+APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).\label{eq:releverage-loss}
 \end{equation}
 
 \end_inset
@@ -541,6 +541,31 @@ Simulations and pool optimization
 \end_layout
 
 \begin_layout Standard
+All simulations done in this paper are performed by simulating arbitrage between the AMM and external price feed (usually taken from Binance).
+ In that,
+ a model of pool AMM is being arbitraged with an infinitely deep 
+\begin_inset Quotes eld
+\end_inset
+
+heatsink
+\begin_inset Quotes erd
+\end_inset
+
+ which has a price changed betwen highs and lows of the candles of the feed.
+ All the AMM volume is assummed to be only arbitrage between the current state of the AMM and the external prices.
+ If,
+ profit which arbitrage trader is making is smaller than some threshold value (typically 
+\begin_inset Formula $0.03\%$
+\end_inset
+
+) - the trade is not happening.
+ Also volumes stop flowing as soon as the arbitrage volume hits half of the exchange volume in the pair:
+ that,
+ however,
+ plays only a small role in the simulations.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement document
 alignment document
@@ -562,6 +587,12 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:xyk-fee"
+
+\end_inset
+
 Reference study:
  optimizing 
 \begin_inset Formula $xy=k$
@@ -583,6 +614,85 @@ Reference study:
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+First,
+ we simulate 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ bonding curve (e.g.
+ like Uniswap2) for sanity check of the method (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:xyk-fee"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ The only adjustable parameter in this AMM is itse fee.
+ There is a clear maxumum in dependendency of APR over the AMM fee,
+ but it is fair to say that over the simulated range (1 Jan 2023 - 1 Nov 2024) the APR of 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ AMM appears around 
+\begin_inset Formula $3\%$
+\end_inset
+
+.
+ This APR is on top of the value 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ bonding curve would have had if the AMM fee was 
+\begin_inset Formula $0$
+\end_inset
+
+ (e.g.
+ on top of unremoved impermanent loss).
+\end_layout
+
+\begin_layout Standard
+Simulation for cryptoswap is more complicated.
+ I have found that replacing cryptoswap invariant with stableswap invariant while keeping the algorithm of the cryptoswap the same gives better results if subsidy with crvUSD interest rate is used while having less adjustable parameters.
+ In this simulation we set borrow rate to 
+\begin_inset Formula $10\%$
+\end_inset
+
+ which is 
+\begin_inset Formula $-5\%$
+\end_inset
+
+ APR spent on subsidizing liquidity rebalancing and continuously taken from LPs (while they earn fees).
+ If we use stalbeswap invariant,
+ the parameter optimization should be seeking for maximum APR in the parameter space which includes 
+\begin_inset Formula $A$
+\end_inset
+
+ (concentration parameter),
+ 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ (minimum AMM fee),
+ 
+\begin_inset Formula $f_{out}$
+\end_inset
+
+ (maximum AMM fee) and 
+\begin_inset Formula $\gamma_{fee}$
+\end_inset
+
+ (fee steepness parameter).
+ Ideally the borrow rate also should be optimized since we are in the full control of it,
+ but this was not done in these simulations (will be done in the nearest future).
 \end_layout
 
 \begin_layout Standard
@@ -684,6 +794,12 @@ Optimizing concentration parameter
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cryptoswap-nondynamic-fee"
+
+\end_inset
+
 Initial optimization of cryptopool:
  no dynamic fee applied.
  Data over 6 years (Jan 2019 - Oct 2024) used
@@ -697,6 +813,75 @@ Initial optimization of cryptopool:
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Initially,
+ we assume the fee to be always constant to find the approximately good range for 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+.
+ In this simulation,
+ we set 
+\begin_inset Formula $f_{out}$
+\end_inset
+
+ to be equal to 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+,
+ and that turns the dynamic fee off.
+ The results of such a scan are shown on Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cryptoswap-nondynamic-fee"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ One can notice that as concentrated liquidity becomes denser (e.g.
+ 
+\begin_inset Formula $A$
+\end_inset
+
+ increases),
+ the APR grows.
+ However,
+ around a certain threshold (around 
+\begin_inset Formula $A=4$
+\end_inset
+
+),
+ the APR becomes dropping in a step-wise manner.
+ At that point,
+ volatility becomes too high for the rebalance algorithm to follow,
+ and the APR drops.
+ When there's another place of high volatility on the price graph - we observe the second step forming.
+ We should be choosing the highers value of 
+\begin_inset Formula $A$
+\end_inset
+
+ before the first discontinuity.
+ It is also interesting to note that the optimal 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ appears to be 
+\begin_inset Formula $0.3\%$
+\end_inset
+
+ - similar to typical Uniswap 2 fee.
 \end_layout
 
 \begin_layout Standard
@@ -792,6 +977,12 @@ optimization
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:dynamic-fee-optimization"
+
+\end_inset
+
 Final optimization step for standard 
 \begin_inset Quotes eld
 \end_inset
@@ -816,6 +1007,73 @@ unboosted
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+In the next step,
+ we optimize dynamic fee (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:dynamic-fee-optimization"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ It appears that the 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ found previously with non-dynamic fees (
+\begin_inset Formula $f_{mid}=0.3\%$
+\end_inset
+
+) holds for dynamic fees as well,
+ and 
+\begin_inset Formula $A$
+\end_inset
+
+ could be slightly higher than previously found.
+ So we first set 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ at the parameters found in the non-dynamic scan,
+ and then scan 
+\begin_inset Formula $\left(f_{out},\gamma_{fee}\right)$
+\end_inset
+
+.
+ When we find optimal values - we can slightly vary 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{mid}$
+\end_inset
+
+ to get the final adjustments and then rescan.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:dynamic-fee-optimization"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ shows the result.
+ I also provide results of a similar optimization with no borrow rate donation feature for comparison.
 \end_layout
 
 \begin_layout Standard
@@ -848,6 +1106,12 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage-sim-fee"
+
+\end_inset
+
 Optimizing releverage AMM fee (optimal value:
  
 \begin_inset Formula $f=0.007$
@@ -889,6 +1153,12 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage-sim-6"
+
+\end_inset
+
 Simulation from Jan 2019 till Oct 2024:
  average APR = 
 \begin_inset Formula $20\%$
@@ -899,10 +1169,6 @@ Simulation from Jan 2019 till Oct 2024:
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -933,6 +1199,12 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage-sim-2"
+
+\end_inset
+
 Simulation from Jan 2023 till Oct 2024 (tail of Fig.
  b):
  average APR = 
@@ -944,10 +1216,6 @@ Simulation from Jan 2023 till Oct 2024 (tail of Fig.
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -975,6 +1243,12 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage-sim-broken"
+
+\end_inset
+
 Example of too aggressive parameters (
 \begin_inset Formula $A=4.8$
 \end_inset
@@ -993,10 +1267,6 @@ Example of too aggressive parameters (
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1006,6 +1276,12 @@ Example of too aggressive parameters (
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:releverage-sim"
+
+\end_inset
+
 Simulation with releverage AMM removing impermanent loss.
  Data is obtained for BTC/USD price feed
 \end_layout
@@ -1022,6 +1298,189 @@ Simulation with releverage AMM removing impermanent loss.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+While releverage algorithm will be described further,
+ I reference the full simulation of releverage here (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ The releverage is made via a special AMM which is also simulated as arbitrage.
+\end_layout
+
+\begin_layout Standard
+Noteworthy,
+ simulation of releverage is separable from simulation of the base AMM (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ It turns out that losses on releverage 
+\begin_inset Formula $r_{loss}$
+\end_inset
+
+ from Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:releverage-loss"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ appears to be extremely close to twice the optimized returns of 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ pools (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:xyk-fee"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+) which makes the APR to be not higher than 
+\begin_inset Formula $0$
+\end_inset
+
+ for 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ bonding curve.
+ This result in itself is worth to study later.
+ However,
+ APR in Curve cryptopools is strictly higher than 
+\begin_inset Formula $xy=k$
+\end_inset
+
+ returns when the parameters are optimal,
+ which means that releverage should give a positive APR.
+ We confirm that with direct simulations of the releverage AMM.
+\end_layout
+
+\begin_layout Standard
+Simulation results from Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ show promising numbers for BTC/USD returns.
+ The graphs show value of the resultant LP position in BTC over time.
+ Notable features of the simulation results:
+\end_layout
+
+\begin_layout Itemize
+Dependency on the releverage AMM fee is very flat (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim-fee"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+);
+\end_layout
+
+\begin_layout Itemize
+Average APR over 6 years is around 
+\begin_inset Formula $20\%$
+\end_inset
+
+ (peaking over year 2021 to 
+\begin_inset Formula $60\%$
+\end_inset
+
+) (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim-6"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+ however being just under 
+\begin_inset Formula $10\%$
+\end_inset
+
+ in more calm (and bearish) market conditions (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim-2"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+);
+\end_layout
+
+\begin_layout Itemize
+If concentration 
+\begin_inset Formula $A$
+\end_inset
+
+ is set slightly higher than necessary - releverage algorithm experiences a loss at the point of the rebalance breaking down,
+ however growth rate in calmer market conditions is higher,
+ so the average APR over 6 years is the same (Fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:releverage-sim-broken"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ This example shows how to estimate volatility risks in the product.
 \end_layout
 
 \begin_layout Section*
