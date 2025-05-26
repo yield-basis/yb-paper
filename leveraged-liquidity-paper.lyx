@@ -2272,7 +2272,7 @@ Part of debt
 \end_layout
 
 \begin_layout Section*
-Splitting revenues with staked and unstaked liquidity
+Splitting revenues between staked and unstaked liquidity
 \end_layout
 
 \begin_layout Standard
@@ -2673,6 +2673,46 @@ From this:
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section*
+Arbitraging leverage AMM and virtual pool
+\end_layout
+
+\begin_layout Standard
+When we leverage liquidity,
+ the AMM exchanges between stablecoins and LP token of cryptopool.
+ Arbitrage trader,
+ however,
+ wants to exchange between real cryptocurrency and stablecoin,
+ not LP token.
+ Therefore,
+ we create a 
+\begin_inset Quotes eld
+\end_inset
+
+virtual pool
+\begin_inset Quotes erd
+\end_inset
+
+ smart contract which combines leverage AMM,
+ cryptopool and stablecoin (crvUSD) flash loans for that task.
+\end_layout
+
+\begin_layout Subsection*
+Exchange from stablecoin to cryptoasset in virtual pool
+\end_layout
+
+\begin_layout Standard
+...
+\end_layout
+
+\begin_layout Subsection*
+Exchange from cryptoasset to stablecoin in virtual pool
+\end_layout
+
+\begin_layout Standard
+...
 \end_layout
 
 \end_body
