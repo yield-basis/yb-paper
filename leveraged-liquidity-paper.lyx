@@ -2700,19 +2700,154 @@ virtual pool
 \end_layout
 
 \begin_layout Subsection*
-Exchange from stablecoin to cryptoasset in virtual pool
-\end_layout
-
-\begin_layout Standard
-...
-\end_layout
-
-\begin_layout Subsection*
 Exchange from cryptoasset to stablecoin in virtual pool
 \end_layout
 
 \begin_layout Standard
-...
+The exchange consists of the following steps:
+\end_layout
+
+\begin_layout Itemize
+Use a flash loan to borrow exact amount of crvUSD to add cryptoasset and those crvUSD as balanced liquidity in cryptopool.
+ This action does not change the spot price in cryptopool;
+\end_layout
+
+\begin_layout Itemize
+Exchange LP token to crvUSD in leverage AMM;
+\end_layout
+
+\begin_layout Itemize
+Repay the flash loan from the crvUSD we obtained in leverage AMM;
+\end_layout
+
+\begin_layout Itemize
+Return the rest of the crvUSD to the user.
+\end_layout
+
+\begin_layout Subsection*
+Exchange from stablecoin to cryptoasset in virtual pool
+\end_layout
+
+\begin_layout Standard
+Exchange in this direction is much more elaborate:
+\end_layout
+
+\begin_layout Itemize
+Flash-borrow some additional amount of crvUSD (how much - we will calculate further);
+\end_layout
+
+\begin_layout Itemize
+Exchange all the crvUSD we've got (provided by user + flash loan) to cryptopool LP in the leverage AMM;
+\end_layout
+
+\begin_layout Itemize
+Remove liquidity from the cryptopool symmetrically (e.g.
+ without changing crypto-to-stablecoin ratio and price);
+\end_layout
+
+\begin_layout Itemize
+Now we should get exactly correct amount for stablecoins to return the flash loan.
+ Thus,
+ it is important to precisely calculate this amount before the swap.
+\end_layout
+
+\begin_layout Standard
+If leverage AMM fee is 
+\begin_inset Formula $f$
+\end_inset
+
+,
+ debt is 
+\begin_inset Formula $d$
+\end_inset
+
+,
+ collateral amount in AMM is 
+\begin_inset Formula $y$
+\end_inset
+
+,
+ 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is known,
+ and also cryptopool has 
+\begin_inset Formula $x_{c}$
+\end_inset
+
+ stablecoins,
+ 
+\begin_inset Formula $y_{c}$
+\end_inset
+
+amount of crypto and 
+\begin_inset Formula $S_{c}$
+\end_inset
+
+ total supply of LP tokens,
+ we can find the flash amount 
+\begin_inset Formula $\varphi$
+\end_inset
+
+ from the input amount of stablecoins 
+\begin_inset Formula $x$
+\end_inset
+
+ by solving a quadratic equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\varphi^{2}+\varphi\left(x_{0}-d+x-\frac{x_{c}}{S_{c}}\left(1-f\right)y\right)-yx\frac{x_{c}}{S_{c}}\left(1-f\right)=0.
+\end{equation}
+
+\end_inset
+
+If we denote 
+\begin_inset Formula $r=\frac{x_{c}}{S_{c}}\left(1-f\right)$
+\end_inset
+
+,
+ we obtain:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+D=b^{2}+4yxr,\qquad b=x_{0}-d+x-ry,
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\varphi=\frac{1}{2}\left(\sqrt{D}-b\right).
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+It was shown how to eliminate impermanent loss and provide automatically managed concentrated liquidity in a special automatic market-maker which is a combination of Curve cryptoswap AMM and a special releverage AMM.
+ Simulations show promising results over 6 years timespan (20% average APR).
+ The method described here is being implemented in Yield Basis.
+\end_layout
+
+\begin_layout Standard
+Future directions of work will include optimizations of borrow rate,
+ making this borrow rate and other AMM parameters dynamic depending on asset volatility.
 \end_layout
 
 \end_body
