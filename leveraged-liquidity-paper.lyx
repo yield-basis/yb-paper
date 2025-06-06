@@ -185,7 +185,11 @@ In Curve Cryptoswap AMM,
 
 \begin_layout Standard
 Now,
- let's consider leverage 
+ let's consider 
+\shape italic
+compounding
+\shape default
+ leverage 
 \begin_inset Formula $L$
 \end_inset
 
@@ -212,7 +216,7 @@ always
 \end_inset
 
  is value of collateral,
- the position will be leveraged with the leverage 
+ the position will be leveraged with the compounding leverage 
 \begin_inset Formula $L$
 \end_inset
 
@@ -230,15 +234,15 @@ always
 
 \begin_layout Standard
 Let's prove this formula.
- Small change in the price 
+ Small change in the value 
 \begin_inset Formula $p_{*}$
 \end_inset
 
- of a token with price 
+ of the position with price 
 \begin_inset Formula $p^{\prime}$
 \end_inset
 
- leveraged with the leverage 
+ leveraged with the compounding leverage 
 \begin_inset Formula $L$
 \end_inset
 
@@ -2188,7 +2192,7 @@ nolink "false"
 \end_layout
 
 \begin_layout Itemize
-Calculate amount of YB tokens to mint for the depositor proportionally to the value increase from our deposit.
+Calculate amount of ybBTC tokens to mint for the depositor proportionally to the value increase from their deposit.
 \end_layout
 
 \begin_layout Subsection*
