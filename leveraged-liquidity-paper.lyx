@@ -389,7 +389,7 @@ Another curious property is that for
  But USD part of that liquidity is also equal to half of its size in value.
  Therefore,
  if leverage is kept constant and equal to 2,
- liquidity will on aberage have enough USD to close the position,
+ liquidity will on average have enough USD to close the position,
  which is a very convenient property.
 \end_layout
 
