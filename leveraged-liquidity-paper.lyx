@@ -2932,8 +2932,9 @@ It was shown how to eliminate impermanent loss and provide automatically managed
 \end_layout
 
 \begin_layout Standard
-Future directions of work will include optimizations of borrow rate,
- making this borrow rate and other AMM parameters dynamic depending on asset volatility.
+Future directions of work which are currently ongoing include optimizations of borrow rate,
+ making this borrow rate and other AMM parameters dynamic depending on asset volatility,
+ as well as excluding any effect of quality of price data on the simulated profits and optimal parameters.
 \end_layout
 
 \end_body
