@@ -194,6 +194,7 @@ compounding
 \end_inset
 
 .
+ Here we define compounding leverage as the number which defines the fraction of debt relative to collateral size.
  If one borrows against any token with a price 
 \begin_inset Formula $p^{\prime}$
 \end_inset
@@ -234,7 +235,88 @@ always
 
 \begin_layout Standard
 Let's prove this formula.
- Small change in the value 
+ Imagine that value of collateral 
+\begin_inset Formula $V_{c}$
+\end_inset
+
+ changes by a small amount 
+\begin_inset Formula $dV_{c}$
+\end_inset
+
+,
+ and we split compounding leverage in two steps:
+ growth of collateral price and changing the debt to keep with the 
+\begin_inset Formula $d/V_{c}$
+\end_inset
+
+ ratio.
+ In equilibrium,
+ if collateral amount is 
+\begin_inset Formula $y$
+\end_inset
+
+ and its price is 
+\begin_inset Formula $p^{\prime}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+V_{*}=V_{c}-d=\frac{V_{c}}{L}=\frac{p^{\prime}y}{L}.
+\end{equation}
+
+\end_inset
+
+For the first step,
+ value of leverage position 
+\begin_inset Formula $V_{*}$
+\end_inset
+
+ would change:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+V_{*}+\delta V_{*}=\left(V_{c}+\delta V_{c}\right)-V_{c}\left(1-1/L\right)=V_{*}+\delta V_{c}=V_{*}+y\delta p^{\prime},
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\delta V_{*}}{V_{*}}=\frac{y\delta p^{\prime}}{p^{\prime}y/L}=L\frac{\delta p^{\prime}}{p^{\prime}}.
+\end{equation}
+
+\end_inset
+
+When we adjust the debt to buy (or sell) some infinitely small amount of collateral,
+ value 
+\begin_inset Formula $V_{*}$
+\end_inset
+
+ doesn't change,
+ so this relation remains.
+ The ratio 
+\begin_inset Formula $\delta V_{*}/V_{*}$
+\end_inset
+
+ can also be replaced with relative LP token price 
+\begin_inset Formula $\delta p_{*}/p_{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Small change in the value 
 \begin_inset Formula $p_{*}$
 \end_inset
 
