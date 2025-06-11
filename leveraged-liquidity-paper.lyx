@@ -250,7 +250,7 @@ Let's prove this formula.
 \end_inset
 
  ratio.
- In equilibrium,
+ At equilibrium,
  if collateral amount is 
 \begin_inset Formula $y$
 \end_inset
@@ -281,7 +281,7 @@ For the first step,
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-V_{*}+\delta V_{*}=\left(V_{c}+\delta V_{c}\right)-V_{c}\left(1-1/L\right)=V_{*}+\delta V_{c}=V_{*}+y\delta p^{\prime},
+V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d^{d=const}=\left(V_{c}+\delta V_{c}\right)-d=\left(V_{c}-d\right)+\delta V_{c}=V_{*}+\delta V_{c}=V_{*}+y\delta p^{\prime},
 \end{equation}
 
 \end_inset
@@ -297,14 +297,7 @@ V_{*}+\delta V_{*}=\left(V_{c}+\delta V_{c}\right)-V_{c}\left(1-1/L\right)=V_{*}
 
 \end_inset
 
-When we adjust the debt to buy (or sell) some infinitely small amount of collateral,
- value 
-\begin_inset Formula $V_{*}$
-\end_inset
-
- doesn't change,
- so this relation remains.
- The ratio 
+The ratio 
 \begin_inset Formula $\delta V_{*}/V_{*}$
 \end_inset
 
