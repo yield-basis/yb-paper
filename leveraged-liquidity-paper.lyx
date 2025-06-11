@@ -113,7 +113,7 @@ Michael Egorov
 
 \begin_layout Abstract
 Ever since the Automatic Market Makers (AMMs) were introduced in Decentralized Finance (DeFi),
- there was an issue of so-called 
+ they have suffered from 
 \begin_inset Quotes eld
 \end_inset
 
@@ -123,7 +123,7 @@ impermanent loss
 
  (IL,
  or sometimes called LVR - loss vs rebalance),
- that is that AMMs often perform as a worse store of value than simply holding the components of liquidity idle.
+ meaning AMMs often perform as a worse store of value than simply holding the components of liquidity idle.
  In this work,
  I propose a method to eliminate IL and make the position priced similarly to an individual component of liquidity while earning exchange fees.
  The simulations show,
@@ -203,7 +203,7 @@ compounding
 \begin_inset Formula $d$
 \end_inset
 
-is 
+ is 
 \shape italic
 always
 \shape default
@@ -443,21 +443,20 @@ nolink "false"
 \end_inset
 
 ).
- While it sounds simple,
- it will not work with 
+ While the idea appears simple,
+ it does not work with the 
 \begin_inset Formula $xy=k$
 \end_inset
 
- invariant for the liquidity:
- losses on rebalancing to keep the leverage constant (or 
+ invariant:
+ the losses from rebalancing to maintain constant leverage (i.e.
+ 
 \shape italic
 releverage losses
 \shape default
-) will simply be not lower than the earnings of the pool.
- Situation with Curve Cryptoswap,
- however,
- is much better,
- as will be shown in simulations.
+) are not lower than the pool's earnings.
+ The situation is significantly improved with Curve Cryptoswap,
+ as demonstrated in the simulations.
 \end_layout
 
 \begin_layout Standard
@@ -468,7 +467,7 @@ Another curious property is that for
 ,
  size of the loan is equal to half of the size of liquidity leveraged,
  on average.
- But USD part of that liquidity is also equal to half of its size in value.
+ But USD portion of that liquidity is also equal to half of its total value.
  Therefore,
  if leverage is kept constant and equal to 2,
  liquidity will on average have enough USD to close the position,
@@ -488,7 +487,7 @@ APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).\label{eq:releverage-loss}
 \end_inset
 
 So this method only works when the rate pool (multiplied by leverage) is significantly higher than the total of borrow rate and losses introduced by releverage of the position.
- Important to point out that this expression is only approximate,
+ It's important to point out that this expression is only approximate,
  and a more precise APR is given by a combined simulation of cryptopool and releverage.
 \end_layout
 
@@ -637,8 +636,8 @@ heatsink
 \begin_inset Quotes erd
 \end_inset
 
- which has a price changed betwen highs and lows of the candles of the feed.
- All the AMM volume is assummed to be only arbitrage between the current state of the AMM and the external prices.
+ which has a price changed between highs and lows of the candles of the feed.
+ All the AMM volume is assumed to be only arbitrage between the current state of the AMM and the external prices.
  If,
  profit which arbitrage trader is making is smaller than some threshold value (typically 
 \begin_inset Formula $0.03\%$
@@ -722,8 +721,8 @@ nolink "false"
 \end_inset
 
 ).
- The only adjustable parameter in this AMM is itse fee.
- There is a clear maxumum in dependendency of APR over the AMM fee,
+ The only adjustable parameter in this AMM is its fee.
+ There is a clear maximum in dependency of APR over the AMM fee,
  but it is fair to say that over the simulated range (1 Jan 2023 - 1 Nov 2024) the APR of 
 \begin_inset Formula $xy=k$
 \end_inset
@@ -757,7 +756,7 @@ Simulation for cryptoswap is more complicated.
 \end_inset
 
  APR spent on subsidizing liquidity rebalancing and continuously taken from LPs (while they earn fees).
- If we use stalbeswap invariant,
+ If we use stableswap invariant,
  the parameter optimization should be seeking for maximum APR in the parameter space which includes 
 \begin_inset Formula $A$
 \end_inset
@@ -778,7 +777,7 @@ Simulation for cryptoswap is more complicated.
 
  (fee steepness parameter).
  Ideally the borrow rate also should be optimized since we are in the full control of it,
- but this was not done in these simulations (will be done in the nearest future).
+ but this was not done in these simulations (will be done in the near future).
 \end_layout
 
 \begin_layout Standard
@@ -903,7 +902,7 @@ Initial optimization of cryptopool:
 
 \begin_layout Standard
 Initially,
- we assume the fee to be always constant to find the approximately good range for 
+ we assume the fee to be always constant to approximately find the good range for 
 \begin_inset Formula $A$
 \end_inset
 
@@ -949,12 +948,11 @@ nolink "false"
 \end_inset
 
 ),
- the APR becomes dropping in a step-wise manner.
+ the APR drops in a step-wise manner.
  At that point,
- volatility becomes too high for the rebalance algorithm to follow,
- and the APR drops.
+ volatility becomes too high for the rebalance algorithm to follow.
  When there's another place of high volatility on the price graph - we observe the second step forming.
- We should be choosing the highers value of 
+ We should be choosing the highest value of 
 \begin_inset Formula $A$
 \end_inset
 
@@ -2278,11 +2276,11 @@ Calculate amount of ybBTC tokens to mint for the depositor proportionally to the
 \end_layout
 
 \begin_layout Subsection*
-Witdrawals
+Withdrawals
 \end_layout
 
 \begin_layout Standard
-When a user withdraws a fraction of liqudity,
+When a user withdraws a fraction of liquidity,
  in order to not have any unfair disadvantage for liquidity providers,
  one cannot specify an arbitrary value of the debt.
  Instead,
@@ -2642,15 +2640,14 @@ v_{1}^{\prime}=v_{-1}+\Delta v_{use}.
 
 \begin_layout Standard
 If we did not have any losses,
- staked liquidity value us equal to its upper limit:
+ staked liquidity value is equal to its upper limit:
  
 \begin_inset Formula $v_{s}=v_{s*}$
 \end_inset
 
 .
- If we,
- however,
- happened to experience a loss,
+ However,
+ if we experience a loss,
  e.g.
  
 \begin_inset Formula $\Delta v_{use}<0$
