@@ -2304,19 +2304,20 @@ Deposits
 \end_layout
 
 \begin_layout Standard
-When deposit is happening,
- we deposit first in Cryptoswap pool,
- and take a loan with 
+When depositing,
+ funds are first provided to the Cryptoswap pool,
+ creating an LP token.
+ A loan of 
 \begin_inset Formula $d$
 \end_inset
 
- stablecoins against LP token created by this deposit.
- User brings just cryptocurrency (like BTC) with the amount 
+ stablecoins is then taken against this LP token as collateral.
+ User brings in a single cryptocurrency (like BTC) in amount 
 \begin_inset Formula $c_{in}$
 \end_inset
 
 .
- So deposit works in the following sequence:
+ Deposit proceeds in the following sequence:
 \end_layout
 
 \begin_layout Itemize
@@ -2328,8 +2329,8 @@ User brings
 \begin_inset Formula $\Delta d$
 \end_inset
 
- (which has value equal to the value of cryptocurrency ideally,
- or can be calculated proportionally to balances in Cryptoswap);
+ (ideally equal to the deposited value,
+ or set proportionally to Cryptoswap pool balances);
 \end_layout
 
 \begin_layout Itemize
@@ -2403,21 +2404,22 @@ When a user withdraws a fraction of liquidity,
  one cannot specify an arbitrary value of the debt.
  Instead,
  both collateral and debt are reduced by the same fraction equal to fraction of overall LP tokens being withdrawn.
- So withdrawal sequence inside the smart contract looks as the following:
+ So,
+ the withdrawal sequence in the smart contract goes as follows:
 \end_layout
 
 \begin_layout Itemize
-User brings 
+The user brings 
 \begin_inset Formula $t$
 \end_inset
 
- LP tokens to withdraw.
- If supply of LP tokens is 
+ LP tokens for withdraw.
+ If total supply of LP tokens is 
 \begin_inset Formula $s$
 \end_inset
 
 ,
- liquidity gets reduced by 
+ liquidity is reduced by 
 \begin_inset Formula $s/t$
 \end_inset
 
@@ -2425,7 +2427,7 @@ User brings
 \end_layout
 
 \begin_layout Itemize
-Collateral gets reduced by 
+Collateral is reduced by 
 \begin_inset Formula $\delta c=cs/t$
 \end_inset
 
@@ -2438,17 +2440,17 @@ Collateral gets reduced by
 \end_layout
 
 \begin_layout Itemize
-Since collateral is LP tokens of cryptopool,
+Since the collateral is cryptopool LP tokens,
  we withdraw 
 \begin_inset Formula $\delta c$
 \end_inset
 
- LP tokens but in such a way that the amount of stablecoin withdrawn is exactly 
+ LP tokens so that the withdrawn stablecoin amount is exactly 
 \begin_inset Formula $\delta d$
 \end_inset
 
 ,
- and amount of cryptocurrency is kept varied as a function of 
+ and the cryptocurrency amount is kept varied as a function of 
 \begin_inset Formula $\delta c$
 \end_inset
 
@@ -2469,8 +2471,8 @@ Part of debt
 \begin_inset Formula $\delta d$
 \end_inset
 
- gets repaid from the withdrawn stablecoins,
- and cryptocurrency withdrawn from cryptoswap gets passed to the user.
+ gets repaid using the withdrawn stablecoins,
+ and any cryptocurrency withdrawn from cryptoswap is sent to the user.
 \end_layout
 
 \begin_layout Section*
@@ -2479,17 +2481,17 @@ Splitting revenues between staked and unstaked liquidity
 
 \begin_layout Standard
 In Yield Basis,
- real yields are only going to those users who did not opt in to earn YB tokens (e.g.
+ real yields are paid only to users who do not opt in to earn YB tokens (e.g.
  stake).
- If they did not stake - they earn real yield from fees.
- If they did - they don't earn any yield from fees,
- but they earn governance tokens from emissions.
- The system also earns admin fee which is taken from the fees earned and given to YB token stakers (e.g.
+ Users who do not stake earn real yield from trading fees.
+ Users who stake do not earn yield from fees,
+ but instead they receive governance tokens from emissions.
+ The system also charges an admin fee which is taken from the fees earned and given to YB token stakers (e.g.
  veYB).
 \end_layout
 
 \begin_layout Standard
-The fee portion going to veYB dynamically depends on how much is staked.
+The portion of fees given to veYB depends dynamically on the amount staked.
  Let's denote:
 \end_layout
 
@@ -2523,8 +2525,8 @@ The fee portion going to veYB dynamically depends on how much is staked.
 \end_layout
 
 \begin_layout Standard
-With those,
- admin fee will be:
+With these definitions,
+ the admin fee is:
 \end_layout
 
 \begin_layout Standard
