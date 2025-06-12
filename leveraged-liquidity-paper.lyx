@@ -108,7 +108,7 @@ Michael Egorov
 \end_layout
 
 \begin_layout Date
-2 March 2025
+12 June 2025
 \end_layout
 
 \begin_layout Abstract
@@ -2884,13 +2884,12 @@ Arbitraging leverage AMM and virtual pool
 
 \begin_layout Standard
 When we leverage liquidity,
- the AMM exchanges between stablecoins and LP token of cryptopool.
- Arbitrage trader,
- however,
- wants to exchange between real cryptocurrency and stablecoin,
- not LP token.
+ the AMM exchanges stablecoins for the LP token of cryptopool (or in the opposite direction).
+ However,
+ an arbitrage trader wants to exchange between real cryptocurrency and stablecoin,
+ not LP tokens.
  Therefore,
- we create a 
+ we introduce a 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2899,7 +2898,7 @@ virtual pool
 \end_inset
 
  smart contract which combines leverage AMM,
- cryptopool and stablecoin (crvUSD) flash loans for that task.
+ cryptopool and stablecoin (crvUSD) flash loans to facilitate this process.
 \end_layout
 
 \begin_layout Subsection*
@@ -2911,20 +2910,20 @@ The exchange consists of the following steps:
 \end_layout
 
 \begin_layout Itemize
-Use a flash loan to borrow exact amount of crvUSD to add cryptoasset and those crvUSD as balanced liquidity in cryptopool.
+Use a flash loan to borrow exact amount of crvUSD needed to add both cryptoasset and crvUSD as balanced liquidity in the cryptopool.
  This action does not change the spot price in cryptopool;
 \end_layout
 
 \begin_layout Itemize
-Exchange LP token to crvUSD in leverage AMM;
+Exchange the LP token for crvUSD in the leverage AMM;
 \end_layout
 
 \begin_layout Itemize
-Repay the flash loan from the crvUSD we obtained in leverage AMM;
+Repay the flash loan from the crvUSD obtained in leverage AMM;
 \end_layout
 
 \begin_layout Itemize
-Return the rest of the crvUSD to the user.
+Return any remaining crvUSD to the user.
 \end_layout
 
 \begin_layout Subsection*
@@ -2936,11 +2935,11 @@ Exchange in this direction is much more elaborate:
 \end_layout
 
 \begin_layout Itemize
-Flash-borrow some additional amount of crvUSD (how much - we will calculate further);
+Flash-borrow an additional amount of crvUSD (the exact amount will be calculated below);
 \end_layout
 
 \begin_layout Itemize
-Exchange all the crvUSD we've got (provided by user + flash loan) to cryptopool LP in the leverage AMM;
+Exchange all the crvUSD acquired (provided by user + flash loan) to cryptopool LP in the leverage AMM;
 \end_layout
 
 \begin_layout Itemize
@@ -2949,9 +2948,9 @@ Remove liquidity from the cryptopool symmetrically (e.g.
 \end_layout
 
 \begin_layout Itemize
-Now we should get exactly correct amount for stablecoins to return the flash loan.
- Thus,
- it is important to precisely calculate this amount before the swap.
+The result should be the exact amount of stablecoins needed to repay the flash loan.
+ Therefore,
+ it is essential to calculate this amount precisely before executing.
 \end_layout
 
 \begin_layout Standard
@@ -2970,12 +2969,12 @@ If leverage AMM fee is
 \end_inset
 
 ,
- 
+ and 
 \begin_inset Formula $x_{0}$
 \end_inset
 
  is known,
- and also cryptopool has 
+ whole the cryptopool has 
 \begin_inset Formula $x_{c}$
 \end_inset
 
@@ -2984,16 +2983,17 @@ If leverage AMM fee is
 \begin_inset Formula $y_{c}$
 \end_inset
 
-amount of crypto and 
+ amount of crypto,
+ and total LP supply of 
 \begin_inset Formula $S_{c}$
 \end_inset
 
- total supply of LP tokens,
- we can find the flash amount 
+,
+ then the required flash amount 
 \begin_inset Formula $\varphi$
 \end_inset
 
- from the input amount of stablecoins 
+ can be determined from the input amount of stablecoins 
 \begin_inset Formula $x$
 \end_inset
 
@@ -3043,15 +3043,15 @@ Conclusion
 \end_layout
 
 \begin_layout Standard
-It was shown how to eliminate impermanent loss and provide automatically managed concentrated liquidity in a special automatic market-maker which is a combination of Curve cryptoswap AMM and a special releverage AMM.
- Simulations show promising results over 6 years timespan (20% average APR).
- The method described here is being implemented in Yield Basis.
+This work demonstrates a method to eliminate impermanent loss and provide automatically managed concentrated liquidity in a special automatic market-maker which is a combination of Curve cryptoswap AMM and a special releverage AMM.
+ Simulations over a 6 year period show an average APR of 20 percent.
+ The described method is currently being implemented in Yield Basis.
 \end_layout
 
 \begin_layout Standard
-Future directions of work which are currently ongoing include optimizations of borrow rate,
- making this borrow rate and other AMM parameters dynamic depending on asset volatility,
- as well as excluding any effect of quality of price data on the simulated profits and optimal parameters.
+Ongoing work focuses on optimizing borrow rate,
+ making AMM parameters dynamic in response to asset volatility,
+ and ensuring simulated results remain independent on price data quality.
 \end_layout
 
 \end_body
