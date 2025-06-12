@@ -240,16 +240,19 @@ Let's prove this formula.
 \end_inset
 
  changes by a small amount 
-\begin_inset Formula $dV_{c}$
+\begin_inset Formula $\delta V_{c}$
 \end_inset
 
 ,
- and we split compounding leverage in two steps:
- growth of collateral price and changing the debt to keep with the 
+ and we split compounding leverage in three steps:
+ growth of collateral price,
+ changing the debt to keep with the 
 \begin_inset Formula $d/V_{c}$
 \end_inset
 
- ratio.
+ ratio,
+ and adjusting the collateral amount.
+ We take the collateral amount during the first step and the collateral price during the second step as constant.
  At equilibrium,
  if collateral amount is 
 \begin_inset Formula $y$
@@ -270,18 +273,19 @@ V_{*}=V_{c}-d=\frac{V_{c}}{L}=\frac{p^{\prime}y}{L}.
 
 \end_inset
 
-For the first step,
- value of leverage position 
+Consider now the first step;
+ in it,
+ the value of leverage position 
 \begin_inset Formula $V_{*}$
 \end_inset
 
- would change:
+ would change as:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d^{d=const}=\left(V_{c}+\delta V_{c}\right)-d=\left(V_{c}-d\right)+\delta V_{c}=V_{*}+\delta V_{c}=V_{*}+y\delta p^{\prime},
+V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d\stackrel{d=\textbf{const}}{=}\left(V_{c}+\delta V_{c}\right)-d=\left(V_{c}-d\right)+\delta V_{c}=V_{*}+\delta V_{c}=V_{*}+y\delta p^{\prime},
 \end{equation}
 
 \end_inset
@@ -292,53 +296,168 @@ V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d^{d=const}=\left(V_{c}+\delta V_
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\frac{\delta V_{*}}{V_{*}}=\frac{y\delta p^{\prime}}{p^{\prime}y/L}=L\frac{\delta p^{\prime}}{p^{\prime}}.
+\frac{\delta V_{*}}{V_{*}}=\frac{y\delta p^{\prime}}{p^{\prime}y/L}=L\frac{\delta p^{\prime}}{p^{\prime}}=L\frac{\delta V_{c}}{V_{c}}.
 \end{equation}
 
 \end_inset
 
-The ratio 
-\begin_inset Formula $\delta V_{*}/V_{*}$
+Where the latter equality holds because the amount of collateral is constant in the first step,
+ and 
+\begin_inset Formula $V_{c}=yp'$
 \end_inset
 
- can also be replaced with relative LP token price 
-\begin_inset Formula $\delta p_{*}/p_{*}$
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Consider now the other way whereby the value of the position can be changed,
+ namely,
+ the change in the amount of collateral (step 3).
+ When the collateral is changed with the price and the debt kept fixed,
+ the value of leverage position 
+\begin_inset Formula $V_{*}$
+\end_inset
+
+ would change as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d\stackrel{d=const}{=}\left(V_{c}+\delta V_{c}\right)-d=\left(V_{c}-d\right)+\delta V_{c}=V_{*}+\delta V_{c}=V_{*}+p'\delta y
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And,
+ likewise,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\delta V_{*}}{V_{*}}=\frac{p'\delta y}{p^{\prime}y/L}=L\frac{\delta y}{y}=L\frac{\delta V_{c}}{V_{c}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have,
+ therefore,
+ obtained that for any way of changing the value of the collateral,
+ the change in the value of the leveraged position obeys the relationship:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\delta V_{*}}{V_{*}}=L\frac{\delta V_{c}}{V_{c}}.\label{eq:leveraged-value}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have so far ignored the second step;
+ we now show that it will not lead to a degradation of value.
+ As the debt is changed in such a way as to be constrained by a linear relationship with 
+\begin_inset Formula $V_{c}$
+\end_inset
+
+,
+ consider a combination of second and third steps taken together.
+ By definition:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+d=V_{c}\left(1-1/L\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the change in the value of the leveraged position will be given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+V_{*}+\delta V_{*}=V_{c}-d+\delta V_{c}-\delta d=\left(V_{c}+\delta V_{c}\right)-d-\left(1-1/L\right)\delta V_{c}=\left(V_{c}-d\right)+\delta V_{c}-\left(1-1/L\right)\delta V_{c}=V_{*}+\frac{1}{L}\delta V_{c}=V_{*}+\frac{1}{L}p'\delta y
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\delta V_{*}}{V_{*}}=\frac{\frac{1}{L}p'\delta y}{p^{\prime}y/L}=\frac{\delta y}{y}=\frac{\delta V_{c}}{V_{c}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It follows that in such a combined step,
+ the value of the leveraged position behaves exactly like the value of the collateral,
+ and,
+ therefore,
+ the total rate of the change in the value will be given by the preceding step.
+ Intuitively,
+ this result corresponds to the observation that this smooth change in the amount of collateral is purely begotten by and commensurate to the change in the debt.
+ Should we have bundled the first and the second steps instead of the first and the third,
+ the results will have been the same,
+ as demonstrated by the above study in the relative rate of change of the leveraged position value.
+ 
+\end_layout
+
+\begin_layout Standard
+It follows,
+ then,
+ that only one of the steps produces a nontrivial result for the rates of change of the collateral and position values,
+ and for either step taken as such,
+ the relationship is given by Eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:leveraged-value"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
 \end_inset
 
 .
 \end_layout
 
 \begin_layout Standard
-Small change in the value 
-\begin_inset Formula $p_{*}$
-\end_inset
-
- of the position with price 
-\begin_inset Formula $p^{\prime}$
-\end_inset
-
- leveraged with the compounding leverage 
-\begin_inset Formula $L$
-\end_inset
-
- satisfied the relationship:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\frac{dp_{*}}{p_{*}}=L\frac{dp^{\prime}}{p^{\prime}}.
-\end{equation}
-
-\end_inset
-
 Integrating that gives:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-\log p_{*}=L\log p^{\prime}+\textbf{const}.
+\log V_{*}=L\log V_{c}+\textbf{const}.
 \end{equation}
 
 \end_inset
@@ -349,7 +468,7 @@ Exponentiation of both sides gives:
 \begin_layout Standard
 \begin_inset Formula 
 \begin{equation}
-p_{*}\propto\left(p^{\prime}\right)^{L}.
+V_{*}\propto\left(V_{c}\right)^{L}.
 \end{equation}
 
 \end_inset
@@ -414,7 +533,7 @@ Therefore,
 
 ,
  leveraging liquidity would give 
-\begin_inset Formula $p_{*}\propto\left(\sqrt{p}\right)^{2}=p$
+\begin_inset Formula $V_{*}\propto\left(\sqrt{p}\right)^{2}=p$
 \end_inset
 
 ,
