@@ -112,7 +112,7 @@ Michael Egorov
 \end_layout
 
 \begin_layout Abstract
-Ever since the Automatic Market Makers (AMMs) were introduced in Decentralized Finance (DeFi),
+Ever since Automatic Market Makers (AMMs) were introduced in Decentralized Finance (DeFi),
  they have suffered from 
 \begin_inset Quotes eld
 \end_inset
@@ -122,19 +122,20 @@ impermanent loss
 \end_inset
 
  (IL,
- or sometimes called LVR - loss vs rebalance),
- meaning AMMs often perform as a worse store of value than simply holding the components of liquidity idle.
+ or sometimes called LVR - loss vs rebalance).
+ As a result,
+ AMMs often perform worse as store of value than simply holding the components of liquidity idle.
  In this work,
- I propose a method to eliminate IL and make the position priced similarly to an individual component of liquidity while earning exchange fees.
- The simulations show,
+ I propose a method to eliminate IL and price the position similarly to an individual component of liquidity while still earning exchange fees.
+ Simulations show,
  for example,
- that BTC/USD liquidity can make around 
+ that BTC/USD liquidity can earn around 
 \begin_inset Formula $20\%$
 \end_inset
 
- APR (average over 6 years) fundamentally while being priced similarly to BTC.
- Of course,
- the same method is applicable to other cryptocurrencies.
+ APR (averaged over 6 years),
+ with price exposure similar to BTC.
+ The same method is also applicable to other cryptocurrencies.
 \end_layout
 
 \begin_layout Section*
@@ -143,20 +144,22 @@ General idea
 
 \begin_layout Standard
 In Curve Cryptoswap AMM,
- price of liquidity (excluding earned trading fees) is approximately calculated similarly to that in classic 
+ the price of liquidity (excluding earned trading fees) is approximately calculated similarly to that in classic 
 \begin_inset Formula $xy=k$
 \end_inset
 
- invariant 
+ invariant,
+ where 
 \begin_inset Formula $p_{LP}=\sqrt{p}$
 \end_inset
 
-,
- where 
+.
+ Here,
+ 
 \begin_inset Formula $p$
 \end_inset
 
- is price of the token 
+ is price of token 
 \begin_inset Formula $y$
 \end_inset
 
@@ -176,38 +179,43 @@ In Curve Cryptoswap AMM,
 \begin_inset Formula $p\neq1$
 \end_inset
 
- means that holding an asset with initial price of 
+.
+ This means that,
+ with trading fee set to zero,
+ holding holding an asset with an initial price of 
 \begin_inset Formula $1$
 \end_inset
 
- and equal amount of USD would outperform always-rebalanced liquidity if trading fee is set to zero.
+ and an equal amount of USD would outperform always-rebalanced liquidity.
 \end_layout
 
 \begin_layout Standard
 Now,
- let's consider 
+ consider 
 \shape italic
 compounding
 \shape default
- leverage 
+ leverage,
+ denoted by 
 \begin_inset Formula $L$
 \end_inset
 
 .
- Here we define compounding leverage as the number which defines the fraction of debt relative to collateral size.
+ We define compounding leverage as the number determining the fraction of debt relative to collateral size.
  If one borrows against any token with a price 
 \begin_inset Formula $p^{\prime}$
 \end_inset
 
- to buy even more of that token so that the value of the loan 
+ to buy even more of that token,
+ and keep the loan value 
 \begin_inset Formula $d$
 \end_inset
 
- is 
+
 \shape italic
 always
 \shape default
- kept to be equal to 
+ equal to 
 \begin_inset Formula $d=V_{c}\left(1-1/L\right)$
 \end_inset
 
@@ -217,12 +225,12 @@ always
 \end_inset
 
  is value of collateral,
- the position will be leveraged with the compounding leverage 
+ the position will remain leveraged with compounding leverage 
 \begin_inset Formula $L$
 \end_inset
 
- at all times,
- and price of the whole position 
+ at all times.
+ The price of the whole position 
 \begin_inset Formula $p_{*}$
 \end_inset
 
@@ -235,7 +243,7 @@ always
 
 \begin_layout Standard
 Let's prove this formula.
- Imagine that value of collateral 
+ Suppose the value of collateral 
 \begin_inset Formula $V_{c}$
 \end_inset
 
@@ -243,10 +251,10 @@ Let's prove this formula.
 \begin_inset Formula $\delta V_{c}$
 \end_inset
 
-,
- and we split compounding leverage in three steps:
+.
+ We split compounding leverage in three steps:
  growth of collateral price,
- changing the debt to keep with the 
+ changing the debt to maintain the 
 \begin_inset Formula $d/V_{c}$
 \end_inset
 
@@ -254,7 +262,7 @@ Let's prove this formula.
  and adjusting the collateral amount.
  We take the collateral amount during the first step and the collateral price during the second step as constant.
  At equilibrium,
- if collateral amount is 
+ if the collateral amount is 
 \begin_inset Formula $y$
 \end_inset
 
@@ -279,7 +287,7 @@ Consider now the first step;
 \begin_inset Formula $V_{*}$
 \end_inset
 
- would change as:
+ changes as follows:
 \end_layout
 
 \begin_layout Standard
@@ -537,12 +545,12 @@ Therefore,
 \end_inset
 
 ,
- simply price of the token 
+ which is simply the price of token 
 \begin_inset Formula $y$
 \end_inset
 
 ,
- while the position makes exchange fees in addition (Fig.
+ while the position earns exchange fees in addition (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -555,13 +563,13 @@ nolink "false"
 \end_inset
 
 ).
- While the idea appears simple,
+ While this idea appears simple,
  it does not work with the 
 \begin_inset Formula $xy=k$
 \end_inset
 
- invariant:
- the losses from rebalancing to maintain constant leverage (i.e.
+ invariant.
+ The losses from rebalancing to maintain constant leverage (i.e.
  
 \shape italic
 releverage losses
@@ -572,12 +580,12 @@ releverage losses
 \end_layout
 
 \begin_layout Standard
-Another curious property is that for 
+Another useful property is that for 
 \begin_inset Formula $L=2$
 \end_inset
 
 ,
- size of the loan is equal to half of the size of liquidity leveraged,
+ the size of the loan is equal to half the size of liquidity leveraged,
  on average.
  But USD portion of that liquidity is also equal to half of its total value.
  Therefore,
@@ -598,9 +606,9 @@ APR=2r_{pool}-\left(r_{borrow}+r_{loss}\right).\label{eq:releverage-loss}
 
 \end_inset
 
-So this method only works when the rate pool (multiplied by leverage) is significantly higher than the total of borrow rate and losses introduced by releverage of the position.
+This method only works when the pool rate (multiplied by leverage) is significantly higher than the sum of borrow rate and losses introduced by releverage of the position.
  It's important to point out that this expression is only approximate,
- and a more precise APR is given by a combined simulation of cryptopool and releverage.
+ and a more precise APR can be obtained by simulating both the cryptopool and releverage.
 \end_layout
 
 \begin_layout Section*
@@ -611,8 +619,8 @@ Using CDP interest rate for rebalancing
 In Curve,
  all liquidity pools have concentrated liquidity.
  However,
- when price of the asset is not constant,
- concentrated liquidity is moved towards current prices automatically (Fig.
+ when the price of the asset is not constant,
+ concentrated liquidity automatically moves towards the current price (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -738,7 +746,7 @@ Simulations and pool optimization
 \end_layout
 
 \begin_layout Standard
-All simulations done in this paper are performed by simulating arbitrage between the AMM and external price feed (usually taken from Binance).
+All simulations in this paper are performed by simulating arbitrage between the AMM and external price feed (usually taken from Binance).
  In that,
  a model of pool AMM is being arbitraged with an infinitely deep 
 \begin_inset Quotes eld
