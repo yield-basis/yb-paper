@@ -746,9 +746,9 @@ Simulations and pool optimization
 \end_layout
 
 \begin_layout Standard
-All simulations in this paper are performed by simulating arbitrage between the AMM and external price feed (usually taken from Binance).
- In that,
- a model of pool AMM is being arbitraged with an infinitely deep 
+All simulations in this paper are performed by simulating arbitrage between the AMM and an external price feed (usually taken from Binance).
+ In this setup,
+ the AMM pool is arbitraged against an infinitely deep 
 \begin_inset Quotes eld
 \end_inset
 
@@ -756,18 +756,16 @@ heatsink
 \begin_inset Quotes erd
 \end_inset
 
- which has a price changed between highs and lows of the candles of the feed.
- All the AMM volume is assumed to be only arbitrage between the current state of the AMM and the external prices.
- If,
- profit which arbitrage trader is making is smaller than some threshold value (typically 
+ whose price changes between highs and lows of the candles of the feed's price candles.
+ All AMM volume is assumed to come only from arbitrage between the AMM's current state and external prices.
+ If the arbitrage profit is smaller than a certain threshold value (typically 
 \begin_inset Formula $0.03\%$
 \end_inset
 
-) - the trade is not happening.
- Also volumes stop flowing as soon as the arbitrage volume hits half of the exchange volume in the pair:
- that,
- however,
- plays only a small role in the simulations.
+),
+ no trade occurs.
+ Trading volume also stops once the arbitrage volume reaches half of the total exchange volume in the pair,
+ although this has only minor impact in the simulations.
 \end_layout
 
 \begin_layout Standard
@@ -828,7 +826,7 @@ First,
 \end_inset
 
  bonding curve (e.g.
- like Uniswap2) for sanity check of the method (Fig.
+ like Uniswap2) as a sanity check of the method (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -842,21 +840,21 @@ nolink "false"
 
 ).
  The only adjustable parameter in this AMM is its fee.
- There is a clear maximum in dependency of APR over the AMM fee,
+ There is a clear maximum in the dependency of APR on the AMM fee,
  but it is fair to say that over the simulated range (1 Jan 2023 - 1 Nov 2024) the APR of 
 \begin_inset Formula $xy=k$
 \end_inset
 
- AMM appears around 
+ AMM appears to be around 
 \begin_inset Formula $3\%$
 \end_inset
 
 .
- This APR is on top of the value 
+ This APR is in addition to what the value 
 \begin_inset Formula $xy=k$
 \end_inset
 
- bonding curve would have had if the AMM fee was 
+ bonding curve would yield if the AMM fee were 
 \begin_inset Formula $0$
 \end_inset
 
@@ -866,18 +864,20 @@ nolink "false"
 
 \begin_layout Standard
 Simulation for cryptoswap is more complicated.
- I have found that replacing cryptoswap invariant with stableswap invariant while keeping the algorithm of the cryptoswap the same gives better results if subsidy with crvUSD interest rate is used while having less adjustable parameters.
+ I have found that replacing cryptoswap invariant with stableswap invariant,
+ while keeping the algorithm of the cryptoswap unchanged,
+ gives better results when a subsidy with crvUSD interest rate is used while having less adjustable parameters.
  In this simulation we set borrow rate to 
 \begin_inset Formula $10\%$
 \end_inset
 
- which is 
+ meaning that 
 \begin_inset Formula $-5\%$
 \end_inset
 
- APR spent on subsidizing liquidity rebalancing and continuously taken from LPs (while they earn fees).
+ APR is spent on subsidizing liquidity rebalancing and continuously taken from LPs (while they earn fees).
  If we use stableswap invariant,
- the parameter optimization should be seeking for maximum APR in the parameter space which includes 
+ parameter optimization seeks the maximum APR within a parameter space that includes 
 \begin_inset Formula $A$
 \end_inset
 
@@ -896,8 +896,8 @@ Simulation for cryptoswap is more complicated.
 \end_inset
 
  (fee steepness parameter).
- Ideally the borrow rate also should be optimized since we are in the full control of it,
- but this was not done in these simulations (will be done in the near future).
+ Ideally the borrow rate should also be optimized since we are in full control of it,
+ but this was not done in these simulations (this will be addressed in future work).
 \end_layout
 
 \begin_layout Standard
@@ -986,10 +986,6 @@ Optimizing concentration parameter
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1041,7 +1037,7 @@ Initially,
 \end_inset
 
 ,
- and that turns the dynamic fee off.
+ which disables the dynamic fee.
  The results of such a scan are shown on Fig.
  
 \begin_inset CommandInset ref
@@ -1055,7 +1051,7 @@ nolink "false"
 \end_inset
 
 .
- One can notice that as concentrated liquidity becomes denser (e.g.
+ As concentrated liquidity becomes denser (e.g.
  
 \begin_inset Formula $A$
 \end_inset
@@ -1077,7 +1073,7 @@ nolink "false"
 \end_inset
 
  before the first discontinuity.
- It is also interesting to note that the optimal 
+ It is also notable that the optimal 
 \begin_inset Formula $f_{mid}$
 \end_inset
 
@@ -1085,7 +1081,7 @@ nolink "false"
 \begin_inset Formula $0.3\%$
 \end_inset
 
- - similar to typical Uniswap 2 fee.
+ - similar to the typical Uniswap 2 fee.
 \end_layout
 
 \begin_layout Standard
@@ -1214,8 +1210,8 @@ unboosted
 \end_layout
 
 \begin_layout Standard
-In the next step,
- we optimize dynamic fee (Fig.
+Next,
+ we optimize for dynamic fee (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1236,13 +1232,13 @@ nolink "false"
 \begin_inset Formula $f_{mid}=0.3\%$
 \end_inset
 
-) holds for dynamic fees as well,
- and 
+) also applies to dynamic fees,
+ and the optimal 
 \begin_inset Formula $A$
 \end_inset
 
  could be slightly higher than previously found.
- So we first set 
+ We first set 
 \begin_inset Formula $A$
 \end_inset
 
@@ -1256,7 +1252,7 @@ nolink "false"
 \end_inset
 
 .
- When we find optimal values - we can slightly vary 
+ Once we find optimal values - we can slightly vary 
 \begin_inset Formula $A$
 \end_inset
 
@@ -1277,7 +1273,8 @@ nolink "false"
 \end_inset
 
  shows the result.
- I also provide results of a similar optimization with no borrow rate donation feature for comparison.
+ For comparison,
+ I also present optimization results without the borrow rate donation feature.
 \end_layout
 
 \begin_layout Standard
@@ -1505,7 +1502,7 @@ Simulation with releverage AMM removing impermanent loss.
 \end_layout
 
 \begin_layout Standard
-While releverage algorithm will be described further,
+While the releverage algorithm will be described om detail later,
  I reference the full simulation of releverage here (Fig.
  
 \begin_inset CommandInset ref
@@ -1569,7 +1566,7 @@ nolink "false"
 
 \end_inset
 
-) which makes the APR to be not higher than 
+) results in the APR to be not higher than 
 \begin_inset Formula $0$
 \end_inset
 
@@ -1578,15 +1575,15 @@ nolink "false"
 \end_inset
 
  bonding curve.
- This result in itself is worth to study later.
+ This is worth further study.
  However,
- APR in Curve cryptopools is strictly higher than 
+ the APR in Curve cryptopools is consistently higher than 
 \begin_inset Formula $xy=k$
 \end_inset
 
  returns when the parameters are optimal,
- which means that releverage should give a positive APR.
- We confirm that with direct simulations of the releverage AMM.
+ indicating that releverage should produce a positive APR.
+ We confirm this with direct simulations of the releverage AMM.
 \end_layout
 
 \begin_layout Standard
@@ -1602,9 +1599,9 @@ nolink "false"
 
 \end_inset
 
- show promising numbers for BTC/USD returns.
- The graphs show value of the resultant LP position in BTC over time.
- Notable features of the simulation results:
+ show promising BTC/USD returns.
+ The graphs display the value of the resultant LP position in BTC over time.
+ Notable features of the simulation include:
 \end_layout
 
 \begin_layout Itemize
@@ -1671,7 +1668,7 @@ If concentration
 
  is set slightly higher than necessary - releverage algorithm experiences a loss at the point of the rebalance breaking down,
  however growth rate in calmer market conditions is higher,
- so the average APR over 6 years is the same (Fig.
+ so the average APR over 6 years remains unchanded (Fig.
  
 \begin_inset CommandInset ref
 LatexCommand ref
