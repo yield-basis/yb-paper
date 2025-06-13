@@ -2420,7 +2420,7 @@ The user brings
 
 ,
  liquidity is reduced by 
-\begin_inset Formula $s/t$
+\begin_inset Formula $t/s$
 \end_inset
 
 ;
@@ -2428,12 +2428,12 @@ The user brings
 
 \begin_layout Itemize
 Collateral is reduced by 
-\begin_inset Formula $\delta c=cs/t$
+\begin_inset Formula $\delta c=ct/s$
 \end_inset
 
 ,
  and debt gets reduced by 
-\begin_inset Formula $\delta d=ds/t$
+\begin_inset Formula $\delta d=dt/s$
 \end_inset
 
 ;
