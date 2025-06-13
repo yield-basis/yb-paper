@@ -121,8 +121,7 @@ impermanent loss
 \begin_inset Quotes erd
 \end_inset
 
- (IL,
- or sometimes called LVR - loss vs rebalance).
+ (IL).
  As a result,
  AMMs often perform worse as store of value than simply holding the components of liquidity idle.
  In this work,
